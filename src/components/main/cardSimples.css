@@ -1,0 +1,11 @@
+.bg-header{
+	background-color: #5babc5!important;
+	color:white;
+}
+
+.card-dcp{
+	min-height: 150px;
+	max-height: 150px;
+	overflow-y:auto;
+}
+

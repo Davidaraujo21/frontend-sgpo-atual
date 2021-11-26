@@ -1,0 +1,46 @@
+.form-style {
+  border-radius: 5px;
+  box-shadow: 2px 2px 12px gray;
+  width: 50%;
+}
+
+.cod {
+  padding-left: 0 !important;
+}
+
+.tipo {
+  padding-right: 0 !important;
+}
+
+@media screen and (min-width: 700px) {
+  .lead {
+    border-radius: 0 8px 8px 0 !important;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .form-style {
+    width: 100%;
+  }
+  .cod {
+    padding-right: 0 !important;
+    margin-bottom: 1rem;
+  }
+
+  .tipo {
+    padding-left: 0 !important;
+  }
+  form .btn-sm{
+    margin-top: 12px;
+  } 
+}
+
+.danger-border{
+  border-color: red!important;
+  box-shadow: 0 0 0 0.2rem #ffc4c4;
+}
+
+.form-label{
+  font-size: 1rem;
+  color: gray;
+}

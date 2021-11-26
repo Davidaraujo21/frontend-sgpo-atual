@@ -1,0 +1,17 @@
+form label{
+    color: #3c8dbc;
+}
+
+.local-btn{
+    display: flex;
+    justify-content: right;
+}
+
+.help-block{
+    color: red;
+    margin-bottom: 0;
+}
+
+.error-input{
+    border-color: red;
+}

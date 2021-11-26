@@ -1,0 +1,8 @@
+.componente .form-group .row :nth-child(1){
+    padding-left: 0;
+}
+
+.componente .form-group .row :nth-child(2){
+    padding-right: 0;
+}
+
