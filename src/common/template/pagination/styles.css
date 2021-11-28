@@ -1,0 +1,10 @@
+.dataTables_paginate{
+    display: flex;
+    justify-content: center;
+}
+
+.pagination .active a{
+    color: white;
+    background-color: #222d32!important;
+    border-color: #222d32!important;
+} 
