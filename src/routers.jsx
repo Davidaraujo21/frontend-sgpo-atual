@@ -1,6 +1,5 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import PrivateRouter from './privateRouter'
 
 import CadastroComponente from "./main/componente/cadastro";
 import CadastroMacroprocesso from "./main/macroprocesso/cadastro";
@@ -10,6 +9,8 @@ import CadastroPartes from "./main/processo/partes/cadastro";
 import CadastroDirecionador from "./main/processo/direcionadores/cadastro";
 import CadastroMaterial from "./main/processo/ferramenta/cadastro";
 import ProcessoList from "./main/processo/processoList";
+import MacroprocessoList from "./main/macroprocesso/macroprocessoList";
+import ComponenteList from "./main/componente/componenteLIst";
 
 export default function Routers(props) {
   return (
@@ -21,7 +22,9 @@ export default function Routers(props) {
       <Route path="/cadastroParte" component={CadastroPartes}/>
       <Route path="/cadastroDirecionador" component={CadastroDirecionador}/>
       <Route path="/cadastroFerramentaMaterial" component={CadastroMaterial}/>
-      <Route path="/listaProcesso" component={ProcessoList}/>
+      <Route path="/listaProcessos" component={ProcessoList}/>
+      <Route path="/listaMacroprocessos" component={MacroprocessoList} />
+      <Route path="/listaComponentes" component={ComponenteList} />
     </Switch>
     
     // <Switch>

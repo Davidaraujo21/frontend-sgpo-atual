@@ -6,8 +6,8 @@ import api from "../../services/api";
 import BoxContent from "../../common/template/boxes/boxContent";
 import Pagination from "../../common/template/pagination/pagination";
 
-const ProcessoList = (props) => {
-  const [processos, setProcessos] = useState([]);
+const MacroprocessoList = (props) => {
+  const [macroprocessos, setMacroprocessos] = useState([]);
   const itemsPerPage = 10;
   const [offset, setOffSet] = useState(0);
   const [total, setTotal] = useState(0);
@@ -18,14 +18,14 @@ const ProcessoList = (props) => {
       setIsLoading(true);
       try {
         const { data } = await api.get(
-          `processos/?limit=${itemsPerPage}&offset=${offset}`
+          `macroprocessos/?limit=${itemsPerPage}&offset=${offset}`
         );
-        setProcessos(data.results);
+        setMacroprocessos(data.results);
         setTotal(data.count);
         setIsLoading(false);
       } catch (err) {
         setIsLoading(false);
-        toast.error("Ocorreu erro ao obter processos");
+        toast.error("Ocorreu um erro ao obter macroprocessos");
       }
     })();
   }, [offset]);
@@ -40,22 +40,21 @@ const ProcessoList = (props) => {
 
   return (
     <>
-      <Content title="Processos" action="lista">
+      <Content title="Macroprocessos" action="lista">
         <BoxContent
           color="secondary"
-          label="Lista de processos"
+          label="Lista de macroprocessos"
           load={isLoading}
         >
-          <Table
-            headers={["Nome", "Gestor", "Proprietário", "Código", "Ações"]}
-          >
-            {processos
-              ? processos.map((processoContent) => (
+          <Table headers={["Nome", "Código", "Componente primário"]}>
+            {macroprocessos
+              ? macroprocessos.map((macroprocessoContent) => (
                   <tr className="row">
-                    <td>{processoContent.nome_processo}</td>
-                    <td>{processoContent.gestorPrincipal}</td>
-                    <td>{processoContent.proprietario}</td>
-                    <td>{processoContent.codigo}</td>
+                    <td>{macroprocessoContent.nome_macroprocesso}</td>
+                    <td>{macroprocessoContent.codigo}</td>
+                    <td>
+                      {macroprocessoContent.componente_primario.nome_componente}
+                    </td>
                     <td>
                       <a className="btn btn-sm btn-primary" href="/">
                         Detalhes
@@ -78,4 +77,4 @@ const ProcessoList = (props) => {
   );
 };
 
-export default ProcessoList;
+export default MacroprocessoList;

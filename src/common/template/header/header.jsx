@@ -16,7 +16,7 @@ const Header = (props) => {
             <ul className="nav navbar-nav navbar-right menu-top">
               <li>
                 <a href="#" className="item-menu-top">
-                  Logout
+                  <i className="fa fa-sign-out"></i>
                 </a>
               </li>
             </ul>
