@@ -5,6 +5,7 @@ import Table from "../../common/template/table/table";
 import api from "../../services/api";
 import BoxContent from "../../common/template/boxes/boxContent";
 import Pagination from "../../common/template/pagination/pagination";
+import { Link } from 'react-router-dom';
 
 const ProcessoList = (props) => {
   const [processos, setProcessos] = useState([]);
@@ -56,10 +57,10 @@ const ProcessoList = (props) => {
                     <td>{processoContent.gestorPrincipal}</td>
                     <td>{processoContent.proprietario}</td>
                     <td>{processoContent.codigo}</td>
-                    <td>
-                      <a className="btn btn-sm btn-primary" href="/">
+                    <td>           
+                      <Link className="btn btn-sm btn-primary" to={`/dcp/${processoContent.id}`}>
                         Detalhes
-                      </a>
+                      </Link>
                     </td>
                   </tr>
                 ))
