@@ -10,10 +10,11 @@ const Home = () => {
   const [componentesTotal, setComponentesTotal] = useState(0)
   const [macroprocessosTotal, setMacroprocessosTotal] = useState(0)
   const [processosTotal, setProcessosTotal] = useState(0)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() =>{
     (async function(){
+        setIsLoading(true)
         try{
             const componenteCount = await api.get("componentes/?limit=1")
             const macroprocessoCount = await api.get("macroprocessos/?limit=1")
@@ -23,6 +24,7 @@ const Home = () => {
             setProcessosTotal(processoCount.data.count)
             setIsLoading(false)
         }catch(err){
+            setIsLoading(false)
             toast.error("Ocorreu um erro ao carregar dados")
         }
     })()
