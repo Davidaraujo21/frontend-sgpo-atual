@@ -5,6 +5,7 @@ import Table from "../../common/template/table/table";
 import api from "../../services/api";
 import BoxContent from "../../common/template/boxes/boxContent";
 import Pagination from "../../common/template/pagination/pagination";
+import { Link } from "react-router-dom";
 
 const MacroprocessoList = (props) => {
   const [macroprocessos, setMacroprocessos] = useState([]);
@@ -56,9 +57,9 @@ const MacroprocessoList = (props) => {
                       {macroprocessoContent.componente_primario.nome_componente}
                     </td>
                     <td>
-                      <a className="btn btn-sm btn-primary" href="/">
+                      <Link className="btn btn-sm btn-primary" to={`/detalhesMacroprocesso/${macroprocessoContent.id}`}>
                         Detalhes
-                      </a>
+                      </Link>
                     </td>
                   </tr>
                 ))

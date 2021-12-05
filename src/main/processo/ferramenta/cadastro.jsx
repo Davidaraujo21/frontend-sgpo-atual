@@ -43,7 +43,7 @@ const CadastroMaterial = (props) => {
                     {...register("descricao", { required: true })}
                   />
                   {errors.descricao?.type === "required" && (
-                    <span className="help-box">Campo obrigatório</span>
+                    <span className="help-block">Campo obrigatório</span>
                   )}
                 </div>
               </div>

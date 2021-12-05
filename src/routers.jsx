@@ -12,6 +12,9 @@ import ProcessoList from "./main/processo/processoList";
 import MacroprocessoList from "./main/macroprocesso/macroprocessoList";
 import ComponenteList from "./main/componente/componenteLIst";
 import Dcp from "./main/processo/dcp/dcp";
+import CadastroCliente from "./main/processo/cliente/cliente";
+import ComponenteDetalhes from "./main/componente/componenteDetail";
+import MacroprocessoDetalhes from "./main/macroprocesso/macroprocessoDetail";
 
 export default function Routers(props) {
   return (
@@ -23,10 +26,13 @@ export default function Routers(props) {
       <Route path="/cadastroParte" component={CadastroPartes}/>
       <Route path="/cadastroDirecionador" component={CadastroDirecionador}/>
       <Route path="/cadastroFerramentaMaterial" component={CadastroMaterial}/>
+      <Route path="/cadastroCliente" component={CadastroCliente} />
       <Route path="/listaProcessos" component={ProcessoList}/>
       <Route path="/listaMacroprocessos" component={MacroprocessoList} />
       <Route path="/listaComponentes" component={ComponenteList} />
       <Route path="/dcp/:id" component={Dcp} />
+      <Route path="/detalhesComponente/:id" component={ComponenteDetalhes} />
+      <Route path="/detalhesMacroprocesso/:id" component={MacroprocessoDetalhes} />
     </Switch>
     
     // <Switch>

@@ -5,6 +5,7 @@ import Table from "../../common/template/table/table";
 import api from "../../services/api";
 import BoxContent from "../../common/template/boxes/boxContent";
 import Pagination from "../../common/template/pagination/pagination";
+import { Link } from "react-router-dom";
 
 const ComponenteList = (props) => {
   const [componentes, setComponentes] = useState([]);
@@ -53,9 +54,9 @@ const ComponenteList = (props) => {
                     <td>{componenteContent.codigo}</td>
                     <td>{componenteContent.tipo}</td>
                     <td>
-                      <a className="btn btn-sm btn-primary" href="/">
+                      <Link className="btn btn-sm btn-primary" to={`/detalhesComponente/${componenteContent.id}`}>
                         Detalhes
-                      </a>
+                      </Link>
                     </td>
                   </tr>
                 ))

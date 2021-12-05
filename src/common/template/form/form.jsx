@@ -9,6 +9,9 @@ const FormModal = (props) =>{
                 {props.loadingSubmit && <Loading />}
                 <div className="box-header with-border">
                     <h3>{props.label}</h3>
+                    <div>
+                        {props.actions ? props.actions : ""}
+                    </div>
                 </div>
                 <div className="box-body">
                     {props.children}

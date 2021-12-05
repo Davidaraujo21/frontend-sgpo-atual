@@ -15,3 +15,7 @@ form label{
 .error-input{
     border-color: red;
 }
+
+textarea{
+    resize: vertical;
+}
