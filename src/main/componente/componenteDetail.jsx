@@ -19,8 +19,8 @@ const ComponenteDetalhes = (props) => {
     clearErrors
   } = useForm();
 
-  const [componenteDados, setComponenteDados] = useState()
   const [isReadOnly, setIsReadOnly] = useState(true);
+  const [isSubmit, setIsSubmit] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -31,20 +31,22 @@ const ComponenteDetalhes = (props) => {
         setValue("objetivo", data.objetivo);
         setValue("codigo", data.codigo);
         setValue("tipo", data.tipo);
-        // setComponenteDados(data)
       } catch (err) {
         toast.error("Ocorreu um erro ao carregar dados dos componentes");
       }
     })();
-  }, [id]);
+  }, [id, setValue]);
 
 
   const onSubmit = async(data) =>{
+    setIsSubmit(true)
     try{
       await api.patch(`componentes/${id}/`, data)
       toast.success("Componente alterado com sucesso")
       setIsReadOnly(true)
+      setIsSubmit(false)
     }catch(err){
+      setIsSubmit(false)
       toast.error("Ocorreu um erro ao alterar o componente")
     }
   }
@@ -60,7 +62,7 @@ const ComponenteDetalhes = (props) => {
         <FormModal
           color="info"
           label={"Detalhes do componente"}
-          loadingSubmit={false}
+          loadingSubmit={isSubmit}
           actions={
             <MenuActions isEdit isDelete toggleIsReadOnly={toggleIsReadOnly}/>
           }
@@ -148,7 +150,7 @@ const ComponenteDetalhes = (props) => {
                 </div>
               </div>
             </div>
-            <FormButton label="Alterar" color="success" isReadOnly={!isReadOnly}/>
+            <FormButton label="Alterar" color="success" isReadOnly={isReadOnly}/>
           </form>
         </FormModal>
       </Content>

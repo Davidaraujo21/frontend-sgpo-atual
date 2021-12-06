@@ -51,12 +51,14 @@ const MacroprocessoDetalhes = (props) => {
   }, [id, setValue]);
 
   const onSubmit = async (data) => {
+    setIsSubmit(true)
     try {
-        console.log(data)
       await api.patch(`macroprocessos/${id}/`, data);
       toast.success("Macroprocesso alterado com sucesso");
       setIsReadOnly(true);
+      setIsSubmit(false)
     } catch (err) {
+      setIsSubmit(false)
       toast.error("Ocorreu um erro ao alterar o macroprocesso");
     }
   };
@@ -163,7 +165,7 @@ const MacroprocessoDetalhes = (props) => {
             <FormButton
               label="Alterar"
               color="success"
-              isReadOnly={!isReadOnly}
+              isReadOnly={isReadOnly}
             />
           </form>
         </FormModal>

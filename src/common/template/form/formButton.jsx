@@ -3,7 +3,7 @@ import React from 'react'
 const FormButton = ({color, label, isReadOnly}) =>{
     return(
         <>
-        {isReadOnly &&
+        {!isReadOnly &&
             <div className="form-group local-btn">
                 <button className={`btn btn-${color}`} type="submit">
                     {label}
