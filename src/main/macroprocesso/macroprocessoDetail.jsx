@@ -5,9 +5,10 @@ import { useForm, Controller } from "react-hook-form";
 import InputMask from "react-input-mask";
 import api from "../../services/api";
 import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import MenuActions from "../../common/template/menuActions/menuActions";
 import FormButton from "../../common/template/form/formButton";
+import MsgAlert from "../../common/template/msgAlert/msgAlert";
 
 const MacroprocessoDetalhes = (props) => {
   const {
@@ -24,6 +25,19 @@ const MacroprocessoDetalhes = (props) => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [componente, setComponente] = useState();
   const [componentes, setComponentes] = useState([]);
+  const history = useHistory();
+
+  const onClickDelete = () => {
+    toast(
+      <MsgAlert
+        text={
+          "A exclusão desse macroprocesso irá excluir todos os processos ligados a ele"
+        }
+        onDelete={onDelete}
+      />,
+      { autoClose: false , limit: 1}
+    );
+  }
 
   useEffect(() => {
     (async function () {
@@ -51,14 +65,14 @@ const MacroprocessoDetalhes = (props) => {
   }, [id, setValue]);
 
   const onSubmit = async (data) => {
-    setIsSubmit(true)
+    setIsSubmit(true);
     try {
       await api.patch(`macroprocessos/${id}/`, data);
       toast.success("Macroprocesso alterado com sucesso");
       setIsReadOnly(true);
-      setIsSubmit(false)
+      setIsSubmit(false);
     } catch (err) {
-      setIsSubmit(false)
+      setIsSubmit(false);
       toast.error("Ocorreu um erro ao alterar o macroprocesso");
     }
   };
@@ -68,6 +82,16 @@ const MacroprocessoDetalhes = (props) => {
     clearErrors();
   }, [isReadOnly, clearErrors]);
 
+  const onDelete = useCallback(async () => {
+      try {
+        await api.delete(`macroprocessos/${id}`);
+        toast.success("Macroprocesso excluído com sucesso");
+        history.push("/listaMacroprocessos");
+      } catch (err) {
+        toast.success("Ocorreu um erro ao excluir o macroprocesso");
+      }
+  }, [id, history]);
+
   return (
     <>
       <Content title="Macroprocesso" action="detalhes">
@@ -76,7 +100,7 @@ const MacroprocessoDetalhes = (props) => {
           color="info"
           loadingSubmit={isSubmit}
           actions={
-            <MenuActions isEdit isDelete toggleIsReadOnly={toggleIsReadOnly} />
+            <MenuActions isEdit isDelete toggleIsReadOnly={toggleIsReadOnly} onDelete={onClickDelete}/>
           }
         >
           <form
@@ -150,11 +174,17 @@ const MacroprocessoDetalhes = (props) => {
                     }`}
                     {...register("componente_primario")}
                   >
-                    <option selected value={componente?.id}>{componente?.nome_componente}</option> 
-                    {componentes.map((comp) =>(
-                        comp.id !== componente?.id &&
-                        <option value={comp.id}>{comp.nome_componente}</option>
-                    ))}
+                    <option selected value={componente?.id}>
+                      {componente?.nome_componente}
+                    </option>
+                    {componentes.map(
+                      (comp) =>
+                        comp.id !== componente?.id && (
+                          <option value={comp.id}>
+                            {comp.nome_componente}
+                          </option>
+                        )
+                    )}
                   </select>
                   {errors.componente_primario?.type === "required" && (
                     <span className="help-block">Campo obrigatório</span>

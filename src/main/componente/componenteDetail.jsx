@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router";
+import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import Content from "../../common/template/content/content";
 import api from "../../services/api";
@@ -8,6 +8,7 @@ import FormModal from "../../common/template/form/form";
 import FormButton from "../../common/template/form/formButton";
 import InputMask from "react-input-mask";
 import MenuActions from "../../common/template/menuActions/menuActions";
+import MsgAlert from "../../common/template/msgAlert/msgAlert";
 
 const ComponenteDetalhes = (props) => {
   const {
@@ -16,12 +17,25 @@ const ComponenteDetalhes = (props) => {
     control,
     formState: { errors },
     setValue,
-    clearErrors
+    clearErrors,
   } = useForm();
 
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [isSubmit, setIsSubmit] = useState(false);
   const { id } = useParams();
+  const history = useHistory();
+
+  const onClickDelete = () => {
+    toast(
+      <MsgAlert
+        text={
+          "A exclusão desse componente irá excluir todos os macroprocessos e processos ligados a ele"
+        }
+        onDelete={onDelete}
+      />,
+      { autoClose: false , limit: 1}
+    );
+  };
 
   useEffect(() => {
     (async function () {
@@ -37,24 +51,33 @@ const ComponenteDetalhes = (props) => {
     })();
   }, [id, setValue]);
 
-
-  const onSubmit = async(data) =>{
-    setIsSubmit(true)
-    try{
-      await api.patch(`componentes/${id}/`, data)
-      toast.success("Componente alterado com sucesso")
-      setIsReadOnly(true)
-      setIsSubmit(false)
-    }catch(err){
-      setIsSubmit(false)
-      toast.error("Ocorreu um erro ao alterar o componente")
+  const onSubmit = async (data) => {
+    setIsSubmit(true);
+    try {
+      await api.patch(`componentes/${id}/`, data);
+      toast.success("Componente alterado com sucesso");
+      setIsReadOnly(true);
+      setIsSubmit(false);
+    } catch (err) {
+      setIsSubmit(false);
+      toast.error("Ocorreu um erro ao alterar o componente");
     }
-  }
+  };
 
   const toggleIsReadOnly = useCallback(() => {
     setIsReadOnly(!isReadOnly);
-    clearErrors()
-   }, [isReadOnly, clearErrors])
+    clearErrors();
+  }, [isReadOnly, clearErrors]);
+
+  const onDelete = useCallback(async () => {
+      try {
+        await api.delete(`componentes/${id}`);
+        toast.success("Componente excluído com sucesso");
+        history.push("/listaComponentes");
+      } catch (err) {
+        toast.success("Ocorreu um erro ao excluir o componente");
+      }
+  }, [id, history]);
 
   return (
     <>
@@ -64,7 +87,12 @@ const ComponenteDetalhes = (props) => {
           label={"Detalhes do componente"}
           loadingSubmit={isSubmit}
           actions={
-            <MenuActions isEdit isDelete toggleIsReadOnly={toggleIsReadOnly}/>
+            <MenuActions
+              isEdit
+              isDelete
+              toggleIsReadOnly={toggleIsReadOnly}
+              onDelete={onClickDelete}
+            />
           }
         >
           <form className="form componente" onSubmit={handleSubmit(onSubmit)}>
@@ -150,7 +178,11 @@ const ComponenteDetalhes = (props) => {
                 </div>
               </div>
             </div>
-            <FormButton label="Alterar" color="success" isReadOnly={isReadOnly}/>
+            <FormButton
+              label="Alterar"
+              color="success"
+              isReadOnly={isReadOnly}
+            />
           </form>
         </FormModal>
       </Content>

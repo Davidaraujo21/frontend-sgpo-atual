@@ -26,6 +26,8 @@ function App() {
             autoClose={3000}
             position="top-center"
             className="alerta"
+            hideProgressBar={true}
+            pauseOnHover={false}
           /> 
         </div>
     </div>
