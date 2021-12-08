@@ -8,7 +8,7 @@ const FormModal = (props) =>{
             <div className={`box box-${props.color}`}>
                 {props.loadingSubmit && <Loading />}
                 <div className="box-header with-border">
-                    <h3>{props.label}</h3>
+                    <h4>{props.label}</h4>
                     <div>
                         {props.actions ? props.actions : ""}
                     </div>

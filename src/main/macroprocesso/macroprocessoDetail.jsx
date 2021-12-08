@@ -96,7 +96,7 @@ const MacroprocessoDetalhes = (props) => {
     <>
       <Content title="Macroprocesso" action="detalhes">
         <FormModal
-          label="Detalhes do processo"
+          label="Detalhes do macroprocesso"
           color="info"
           loadingSubmit={isSubmit}
           actions={
