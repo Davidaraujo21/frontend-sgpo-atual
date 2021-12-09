@@ -1,5 +1,75 @@
 .local-dcp{
-    background-color: rgb(138, 136, 136);
+    background-color: rgb(212, 209, 209);
     display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-areas: 
+    "codigo-nome fronteira fronteira fronteira cadeia-valor proprietario"
+    "objetivo objetivo objetivo objetivo objetivo gestores"
+    "entradas etapas etapas saidas clientes gestores"
+    "entradas etapas etapas saidas clientes direcionadores"
+    "ferramentas areas processos-relacionados processos-relacionados processos-relacionados direcionadores"
+    "ferramentas areas processos-relacionados processos-relacionados processos-relacionados direcionadores"
+    "indicadores indicadores indicadores indicadores indicadores indicadores"
+    ;
+}
 
+.codigo-nome{
+    grid-area: codigo-nome;
+}
+
+.fronteira{
+    grid-area: fronteira;
+}
+
+.cadeia-valor{
+    grid-area: cadeia-valor;
+}
+
+.proprietario{
+    grid-area: proprietario;
+}
+
+.objetivo{
+    grid-area: objetivo;
+}
+
+.gestores{
+    grid-area: gestores;
+}
+
+.entradas{
+    grid-area: entradas;
+}
+
+.etapas{
+    grid-area: etapas;
+}
+
+.saidas{
+    grid-area: saidas;
+}
+
+.clientes{
+    grid-area: clientes;
+}
+
+.ferramentas{
+    grid-area: ferramentas;
+}
+
+.areas{
+    grid-area: areas;
+}
+
+.processos-relacionados{
+    grid-area: processos-relacionados;
+}
+
+.direcionadores{
+    grid-area: direcionadores;
+}
+
+.indicadores{
+    grid-area: indicadores;
 }

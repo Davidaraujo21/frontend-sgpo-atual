@@ -4,6 +4,7 @@ import Content from '../../../common/template/content/content'
 import MenuActions from '../../../common/template/menuActions/menuActions'
 import ProcessoDetail from './processoDetail'
 import DcpDetail from './dcpDetail'
+import { useHistory } from 'react-router-dom'
 
 const Dcp = () =>{
 
@@ -23,7 +24,7 @@ const Dcp = () =>{
                 {isEdit ? 
                     <ProcessoDetail />    
                     :
-                    <DcpDetail />
+                    <DcpDetail /> 
                 }
             </FormModal>
         </Content>
