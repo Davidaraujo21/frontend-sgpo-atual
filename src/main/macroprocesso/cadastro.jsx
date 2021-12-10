@@ -7,6 +7,7 @@ import api from "../../services/api";
 import { toast } from "react-toastify";
 import './styles.css'
 import FormButton from "../../common/template/form/formButton";
+import { useHistory } from "react-router-dom";
 
 const CadastroMacroprocesso = (props) => {
   const {
@@ -18,6 +19,7 @@ const CadastroMacroprocesso = (props) => {
   } = useForm();
   const [componentes, setComponentes] = useState([]);
   const [isSubmit, setIsSubmit] = useState(false)
+  const history = useHistory()
 
   const onSubmit = async (data) => {
     setIsSubmit(true)
@@ -31,6 +33,7 @@ const CadastroMacroprocesso = (props) => {
       reset({ codigo: "" });
       toast.success("Macroprocesso cadastrado com sucesso");
       setIsSubmit(false)
+      history.push("/listaMacroprocessos")
     } catch (err) {
       toast.error("Ocorreu um erro ao cadastrar o macroprocesso");
       setIsSubmit(false)

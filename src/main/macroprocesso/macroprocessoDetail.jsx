@@ -35,7 +35,7 @@ const MacroprocessoDetalhes = (props) => {
         }
         onDelete={onDelete}
       />,
-      { autoClose: false , limit: 1}
+      { autoClose: 6000 , limit: 1}
     );
   }
 

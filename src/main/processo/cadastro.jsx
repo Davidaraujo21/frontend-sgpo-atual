@@ -5,8 +5,8 @@ import { useForm, Controller } from "react-hook-form";
 import InputMask from "react-input-mask";
 import api from "../../services/api";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 import LinkCadastro from "../../common/template/form/linkCadastro";
+import { useHistory } from "react-router-dom";
 
 const CadastroProcesso = () => {
   const {
@@ -22,6 +22,7 @@ const CadastroProcesso = () => {
   const [ferramentas, setFerramentas] = useState([]);
   const [clientes, setClientes] = useState([]);
   const [isSubmit, setIsSubmit] = useState(false);
+  const history = useHistory();
 
   const onSubmit = async (data) => {
     setIsSubmit(true);
@@ -33,6 +34,7 @@ const CadastroProcesso = () => {
       reset({ codigo: "" });
       toast.success("Processo cadastrado com sucesso");
       setIsSubmit(false);
+      history.push("/listaProcessos");
     } catch (err) {
       toast.error("Ocorreu um erro ao cadastrar processo");
       setIsSubmit(false);
@@ -244,7 +246,7 @@ const CadastroProcesso = () => {
                       </option>
                     ))}
                   </select>
-                  <LinkCadastro path={"/cadastroMacroprocesso"}/>
+                  <LinkCadastro path={"/cadastroMacroprocesso"} />
                   {errors.macroProcesso_primario?.type === "required" && (
                     <span className="help-block">Campo obrigatório</span>
                   )}
@@ -266,7 +268,7 @@ const CadastroProcesso = () => {
                       <option value={partes.id}>{partes.nomeParte}</option>
                     ))}
                   </select>
-                  <LinkCadastro path={"/cadastroParte"}/>
+                  <LinkCadastro path={"/cadastroParte"} />
                   {errors.parte?.type === "required" && (
                     <span className="help-block">Campo obrigatório</span>
                   )}
@@ -284,7 +286,7 @@ const CadastroProcesso = () => {
                       <option value={dir.id}>{dir.orgao}</option>
                     ))}
                   </select>
-                  <LinkCadastro path={"/cadastroDirecionador"}/>
+                  <LinkCadastro path={"/cadastroDirecionador"} />
                   {errors.direcionador?.type === "required" && (
                     <span className="help-block">Campo obrigatório</span>
                   )}
@@ -302,7 +304,7 @@ const CadastroProcesso = () => {
                       <option value={fer.id}>{fer.descricao}</option>
                     ))}
                   </select>
-                  <LinkCadastro path={"/cadastroFerramentaMaterial"}/>
+                  <LinkCadastro path={"/cadastroFerramentaMaterial"} />
                   {errors.ferramenta?.type === "required" && (
                     <span className="help-block">Campo obrigatório</span>
                   )}
@@ -311,7 +313,7 @@ const CadastroProcesso = () => {
             </div>
             <div className="form-group">
               <div className="row">
-              <div className="col-xs-6">
+                <div className="col-xs-6">
                   <label htmlFor="">Etapas/Atividades</label>
                   <textarea
                     rows="4"
@@ -338,7 +340,7 @@ const CadastroProcesso = () => {
                       <option value={cliente.id}>{cliente.nome}</option>
                     ))}
                   </select>
-                  <LinkCadastro path={"/cadastroCliente"}/>
+                  <LinkCadastro path={"/cadastroCliente"} />
                   {errors.clientes?.type === "required" && (
                     <span className="help-block">Campo obrigatório</span>
                   )}

@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, { useCallback, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import InputMask from "react-input-mask";
 import api from "../../services/api";
@@ -7,34 +7,41 @@ import "./styles.css";
 import Content from "../../common/template/content/content";
 import FormModal from "../../common/template/form/form";
 import FormButton from "../../common/template/form/formButton";
+import { useHistory } from "react-router-dom";
 
 const CadastroComponente = (props) => {
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors},
+    formState: { errors },
     reset,
   } = useForm();
-  const [isSubmit, setIsSubmit] = useState(false)
+  const [isSubmit, setIsSubmit] = useState(false);
+  const history = useHistory();
 
   const onSubmit = async (data) => {
-    setIsSubmit(true)
+    setIsSubmit(true);
     try {
       await api.post("componentes/", data);
       toast.success("Componente cadastrado com sucesso");
       reset({ codigo: "" });
-      setIsSubmit(false)
+      setIsSubmit(false);
+      history.push("/listaComponentes");
     } catch (err) {
       toast.error("Ocorreu um erro ao cadastrar o componente");
-      setIsSubmit(false)
+      setIsSubmit(false);
     }
   };
 
   return (
     <>
       <Content title="Componente" action="Cadastro">
-        <FormModal color="primary" label="Formulário de cadastro" loadingSubmit={isSubmit}>
+        <FormModal
+          color="primary"
+          label="Formulário de cadastro"
+          loadingSubmit={isSubmit}
+        >
           <form className="form componente" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
               <label htmlFor="">Nome componente</label>
@@ -114,7 +121,7 @@ const CadastroComponente = (props) => {
                 </div>
               </div>
             </div>
-            <FormButton label="Cadastrar" color="success"/>
+            <FormButton label="Cadastrar" color="success" />
           </form>
         </FormModal>
       </Content>
