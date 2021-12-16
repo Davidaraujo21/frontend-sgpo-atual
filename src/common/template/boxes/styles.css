@@ -3,6 +3,14 @@
 }
 
 .box-dcp{
-    text-align: center;
     margin-bottom: 0;
+    min-width: 200px;
+}
+
+.box-dcp .box-header{
+    text-align: center;
+}
+
+.box-dcp .box-body{
+    height: 100%;
 }

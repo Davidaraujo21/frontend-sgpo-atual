@@ -7,6 +7,7 @@ import api from "../../services/api";
 import { toast } from "react-toastify";
 import LinkCadastro from "../../common/template/form/linkCadastro";
 import { useHistory } from "react-router-dom";
+import FormButton from "../../common/template/form/formButton";
 
 const CadastroProcesso = () => {
   const {
@@ -20,6 +21,8 @@ const CadastroProcesso = () => {
   const [partes, setPartes] = useState([]);
   const [direcionadores, setDirecionadores] = useState([]);
   const [ferramentas, setFerramentas] = useState([]);
+  const [entradas, setEntradas] = useState([]);
+  const [saidas, setSaidas] = useState([]);
   const [clientes, setClientes] = useState([]);
   const [isSubmit, setIsSubmit] = useState(false);
   const history = useHistory();
@@ -49,21 +52,34 @@ const CadastroProcesso = () => {
         const ferramentasData = api.get("ferramentas/");
         const partesData = api.get("partes/");
         const clientesData = api.get("clientes/");
+        const entradasData = api.get("entradas/");
+        const saidasData = api.get("saidas/");
 
-        const [macroprocessos, direcionadores, ferramentas, partes, clientes] =
-          await Promise.all([
-            macroprocessoData,
-            direcionadoresData,
-            ferramentasData,
-            partesData,
-            clientesData,
-          ]);
+        const [
+          macroprocessos,
+          direcionadores,
+          ferramentas,
+          partes,
+          clientes,
+          entradas,
+          saidas,
+        ] = await Promise.all([
+          macroprocessoData,
+          direcionadoresData,
+          ferramentasData,
+          partesData,
+          clientesData,
+          entradasData,
+          saidasData,
+        ]);
 
         setMacroprocessos(macroprocessos.data);
         setDirecionadores(direcionadores.data);
         setFerramentas(ferramentas.data);
         setPartes(partes.data);
         setClientes(clientes.data);
+        setEntradas(entradas.data);
+        setSaidas(saidas.data);
       } catch (err) {
         toast.error("Ocorreu um erro ao carregar dados nos campos");
       }
@@ -347,11 +363,47 @@ const CadastroProcesso = () => {
                 </div>
               </div>
             </div>
-            <div className="form-group local-btn">
-              <button className="btn btn-success" type="submit">
-                Cadastrar
-              </button>
+            <div className="form-group">
+              <div className="row">
+                <div className="col-xs-6">
+                  <label>Entradas</label>
+                  <select
+                    multiple
+                    className={`form-control multiselect ${
+                      errors.entradas ? "error-input" : ""
+                    }`}
+                    {...register("entradas", { required: true })}
+                  >
+                    {entradas.map((entrada) => (
+                      <option value={entrada.id}>{entrada.descricao}</option>
+                    ))}
+                  </select>
+                  <LinkCadastro path={"/cadastroEntradaSaida"} />
+                  {errors.clientes?.type === "required" && (
+                    <span className="help-block">Campo obrigatório</span>
+                  )}
+                </div>
+                <div className="col-xs-6">
+                  <label>Saídas</label>
+                  <select
+                    multiple
+                    className={`form-control multiselect ${
+                      errors.saidas ? "error-input" : ""
+                    }`}
+                    {...register("saidas", { required: true })}
+                  >
+                    {saidas.map((saida) => (
+                      <option value={saida.id}>{saida.descricao}</option>
+                    ))}
+                  </select>
+                  <LinkCadastro path={"/cadastroEntradaSaida"} />
+                  {errors.saidas?.type === "required" && (
+                    <span className="help-block">Campo obrigatório</span>
+                  )}
+                </div>
+              </div>
             </div>
+            <FormButton label="Cadastrar" color="success" />
           </form>
         </FormModal>
       </Content>

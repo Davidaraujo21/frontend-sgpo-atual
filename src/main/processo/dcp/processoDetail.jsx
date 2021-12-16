@@ -8,7 +8,7 @@ import "./styles.css";
 import { toast } from "react-toastify";
 import FormButton from "../../../common/template/form/formButton";
 
-const ProcessoDetail = (props) => {
+const ProcessoDetail = ({id, toggleIsEdit}) => {
   const {
     register,
     handleSubmit,
@@ -30,7 +30,6 @@ const ProcessoDetail = (props) => {
   const [ferramentasSelectDados, setFerramentasSelectDados] = useState([]);
   const [clientesSelectDados, setClientesSelectDados] = useState([]);
   const [isSubmit, setIsSubmit] = useState(false);
-  const { id } = useParams();
 
   useEffect(() => {
     (async function () {
@@ -113,7 +112,7 @@ const ProcessoDetail = (props) => {
     try {
       await api.patch(`processos/${id}/`, data);
       toast.success("Processo alterado com sucesso");
-      props.toggleIsEdit();
+      toggleIsEdit();
     } catch (err) {
       toast.error("Ocorreu um erro ao alterar o processo");
     }

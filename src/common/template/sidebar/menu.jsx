@@ -22,6 +22,7 @@ const Menu = () =>{
                         <MenuItem path="/cadastroDirecionador" label="Cadastrar direcionadores" icon="plus" />
                         <MenuItem path="/cadastroFerramentaMaterial" label="Cadastrar materiais" icon="plus" />
                         <MenuItem path="/cadastroCliente" label="Cadastrar clientes" icon="plus" />
+                        <MenuItem path="/cadastroEntradaSaida" label="Cadastrar Entradas/Saidas" icon="plus" />
                     </MenuTree>
                     <MenuItem path="/cadastroProcesso" label="Cadastrar processos" icon="plus"/>
                     <MenuItem path="/listaProcessos" label="Visualizar processos" icon="list"/>

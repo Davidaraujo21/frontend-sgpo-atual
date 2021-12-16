@@ -6,6 +6,7 @@ import api from "../../services/api";
 import BoxContent from "../../common/template/boxes/boxContent";
 import Pagination from "../../common/template/pagination/pagination";
 import { Link } from "react-router-dom";
+import FiltroMacroprocesso from "./macroprocessoFiltro";
 
 const MacroprocessoList = (props) => {
   const [macroprocessos, setMacroprocessos] = useState([]);
@@ -13,13 +14,16 @@ const MacroprocessoList = (props) => {
   const [offset, setOffSet] = useState(0);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [filtros, setFiltros] = useState({})
 
   useEffect(() => {
     (async function () {
       setIsLoading(true);
       try {
+
+        const {codigo, componente} = filtros
         const { data } = await api.get(
-          `macroprocessos/?limit=${itemsPerPage}&offset=${offset}`
+          `macroprocessos/?limit=${itemsPerPage}&offset=${offset}&cod_macroprocesso=${codigo ? codigo : ""}&componente=${componente ? componente : ""}`
         );
         setMacroprocessos(data.results);
         setTotal(data.count);
@@ -29,7 +33,7 @@ const MacroprocessoList = (props) => {
         toast.error("Ocorreu um erro ao obter macroprocessos");
       }
     })();
-  }, [offset]);
+  }, [offset, filtros]);
 
   const handlePageClick = useCallback(
     (event) => {
@@ -39,13 +43,19 @@ const MacroprocessoList = (props) => {
     [total]
   );
 
+  const handleFiltro = (data) =>{
+    setFiltros(data)
+  }
+
   return (
     <>
       <Content title="Macroprocessos" action="lista">
         <BoxContent
           color="secondary"
-          label="Lista de macroprocessos"
           load={isLoading}
+          filter={
+            <FiltroMacroprocesso handleFiltro={handleFiltro} />
+          }
         >
           <Table headers={["Nome", "Código", "Componente primário"]}>
             {macroprocessos

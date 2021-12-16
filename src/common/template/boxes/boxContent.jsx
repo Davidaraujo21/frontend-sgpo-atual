@@ -7,7 +7,10 @@ const BoxContent = (props) =>{
             <div className={`box box-${props.color}`}>
                 {props.load && <Loading />}
                 <div className="box-header with-border">
-                    <h4>{props.label}</h4>
+                    <h3>{props.label}</h3>
+                    <div>
+                        {props.filter ? props.filter: ""}
+                    </div>
                 </div>
                 <div className="box-body">
                     {props.children}

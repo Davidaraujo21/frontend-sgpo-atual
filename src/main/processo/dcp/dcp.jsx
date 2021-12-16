@@ -7,6 +7,7 @@ import DcpDetail from './dcpDetail'
 import { useHistory, useParams } from 'react-router-dom'
 import api from '../../../services/api'
 import { toast } from 'react-toastify'
+import MsgAlert from '../../../common/template/msgAlert/msgAlert'
 
 const Dcp = () =>{
 
@@ -17,6 +18,18 @@ const Dcp = () =>{
     const toggleIsEdit = useCallback(() =>{
         setIsEdit(!isEdit);
     }, [isEdit])
+
+    const onClickDelete = () => {
+        toast(
+          <MsgAlert
+            text={
+              "Você deseja excluir esse processo?"
+            }
+            onDelete={onDelete}
+          />,
+          { autoClose: 6000 , limit: 1}
+        );
+      }
 
     const onDelete = useCallback(async () =>{
         try{
@@ -33,12 +46,12 @@ const Dcp = () =>{
             <FormModal
             label={"DOCUMENTO DE CARACTERIZAÇÃO DE PROCESSO (DCP)"}
             color="info"
-            actions={<MenuActions isEdit isDelete={!isEdit} isGerarDoc={!isEdit} toggleIsReadOnly={toggleIsEdit} onDelete={onDelete}/>}
+            actions={<MenuActions isEdit isDelete={!isEdit} isGerarDoc={!isEdit} toggleIsReadOnly={toggleIsEdit} onDelete={onClickDelete}/>}
             >
                 {isEdit ? 
-                    <ProcessoDetail toggleIsEdit={toggleIsEdit}/>    
+                    <ProcessoDetail id={id} toggleIsEdit={toggleIsEdit}/>    
                     :
-                    <DcpDetail /> 
+                    <DcpDetail id={id} /> 
                 }
             </FormModal>
         </Content>

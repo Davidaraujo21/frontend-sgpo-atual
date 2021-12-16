@@ -5,7 +5,8 @@ import Table from "../../common/template/table/table";
 import api from "../../services/api";
 import BoxContent from "../../common/template/boxes/boxContent";
 import Pagination from "../../common/template/pagination/pagination";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import FiltroProcesso from "./filtroProcesso";
 
 const ProcessoList = (props) => {
   const [processos, setProcessos] = useState([]);
@@ -13,13 +14,20 @@ const ProcessoList = (props) => {
   const [offset, setOffSet] = useState(0);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [filtros, setFiltros] = useState({})
 
   useEffect(() => {
     (async function () {
       setIsLoading(true);
       try {
+        const {codigo, tipo_componente, macroprocesso} = filtros;
+        
         const { data } = await api.get(
-          `processos/?limit=${itemsPerPage}&offset=${offset}`
+          `processos/?limit=${itemsPerPage}&offset=${offset}&cod_processo=${
+            codigo ? codigo : ""
+          }&componente=${
+            tipo_componente ? tipo_componente : ""
+          }&macroprocesso=${macroprocesso ? macroprocesso : ""}`
         );
         setProcessos(data.results);
         setTotal(data.count);
@@ -29,7 +37,7 @@ const ProcessoList = (props) => {
         toast.error("Ocorreu erro ao obter processos");
       }
     })();
-  }, [offset]);
+  }, [offset, filtros]);
 
   const handlePageClick = useCallback(
     (event) => {
@@ -39,13 +47,19 @@ const ProcessoList = (props) => {
     [total]
   );
 
+  const handleFiltro = (data) => {
+    setFiltros(data);
+  }
+
   return (
     <>
       <Content title="Processos" action="lista">
         <BoxContent
           color="secondary"
-          label="Lista de processos"
           load={isLoading}
+          filter={
+            <FiltroProcesso handleFiltro={handleFiltro} />
+          }
         >
           <Table
             headers={["Nome", "Gestor", "Proprietário", "Código", "Ações"]}
@@ -57,8 +71,11 @@ const ProcessoList = (props) => {
                     <td>{processoContent.gestorPrincipal}</td>
                     <td>{processoContent.proprietario}</td>
                     <td>{processoContent.codigo}</td>
-                    <td>           
-                      <Link className="btn btn-sm btn-primary" to={`/dcp/${processoContent.id}`}>
+                    <td>
+                      <Link
+                        className="btn btn-sm btn-primary"
+                        to={`/dcp/${processoContent.id}`}
+                      >
                         Detalhes
                       </Link>
                     </td>

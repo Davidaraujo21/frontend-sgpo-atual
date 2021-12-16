@@ -4,12 +4,12 @@
     grid-template-areas: 
     "codigo-nome fronteira fronteira fronteira cadeia-valor proprietario"
     "objetivo objetivo objetivo objetivo objetivo gestores"
-    "entradas etapas etapas saidas clientes gestores"
-    "entradas etapas etapas saidas clientes direcionadores"
-    "ferramentas areas processos-relacionados processos-relacionados processos-relacionados direcionadores"
-    "ferramentas areas processos-relacionados processos-relacionados processos-relacionados direcionadores"
-    "indicadores indicadores indicadores indicadores indicadores indicadores"
+    "entradas etapas saidas saidas clientes clientes"
+    "entradas etapas saidas saidas clientes clientes"
+    "ferramentas processos-relacionados processos-relacionados processos-relacionados direcionadores direcionadores"
+    "ferramentas processos-relacionados processos-relacionados processos-relacionados direcionadores direcionadores"
     ;
+    grid-template-rows: repeat(6, minmax(120px, auto));
 }
 
 .codigo-nome{

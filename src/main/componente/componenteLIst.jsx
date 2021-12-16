@@ -5,6 +5,7 @@ import Table from "../../common/template/table/table";
 import api from "../../services/api";
 import BoxContent from "../../common/template/boxes/boxContent";
 import Pagination from "../../common/template/pagination/pagination";
+import FiltroComponente from "./componenteFiltro";
 import { Link } from "react-router-dom";
 
 const ComponenteList = (props) => {
@@ -13,13 +14,15 @@ const ComponenteList = (props) => {
   const [offset, setOffSet] = useState(0);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [filtros, setFiltros] = useState({});
 
   useEffect(() => {
     (async function () {
       setIsLoading(true);
       try {
+        const {codigo, tipo_componente} = filtros;
         const { data } = await api.get(
-          `componentes/?limit=${itemsPerPage}&offset=${offset}`
+          `componentes/?limit=${itemsPerPage}&offset=${offset}&componente=${tipo_componente ? tipo_componente : ""}&cod_componente=${codigo ? codigo : ""}`
         );
         setComponentes(data.results);
         setTotal(data.count);
@@ -29,7 +32,7 @@ const ComponenteList = (props) => {
         toast.error("Ocorreu um erro ao obter componentes");
       }
     })();
-  }, [offset]);
+  }, [offset, filtros]);
 
   const handlePageClick = useCallback(
     (event) => {
@@ -38,13 +41,21 @@ const ComponenteList = (props) => {
     },
     [total]
   );
+
+  const handleFiltro = (data) =>{
+    console.log(data);
+    setFiltros(data);
+  }
+
   return (
     <>
       <Content title="Componentes" action="lista">
         <BoxContent
           color="secondary"
-          label="Lista de componentes"
           load={isLoading}
+          filter={
+            <FiltroComponente handleFiltro={handleFiltro} />
+          }
         >
           <Table headers={["Nome", "Código", "Tipo"]}>
             {componentes
