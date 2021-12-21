@@ -6,8 +6,9 @@ import "./styles.css";
 import FormButton from "../../../common/template/form/formButton";
 import api from "../../../services/api";
 import { toast } from "react-toastify";
+import Modal from "../../../common/template/modal/modal";
 
-const CadastroEntradaSaida = (props) => {
+const CadastroSaidas = ({ isOpen, toggle, append }) => {
   const {
     register,
     handleSubmit,
@@ -15,49 +16,39 @@ const CadastroEntradaSaida = (props) => {
     reset,
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = (dataObj) => {
     (async function () {
       try {
-        const entradaObj = {
-            descricao: data.descricaoEntrada
-        }
-        const saidaObj = {
-            descricao: data.descricaoSaida,
-            tipoSaida: data.tipoSaida
-        }
-        await api.post("entradas/", entradaObj)
-        await api.post("saidas/", saidaObj)
-        reset()
-        toast.success("Entradas/Saídas cadastrado com sucesso")
+        const {data} = await api.post("saidas/", dataObj);
+        append(data);
+        reset();
+        toggle();
+        toast.success("Saídas cadastradas com sucesso");
       } catch (err) {
-        toast.error("Ocorreu um erro ao cadastrar Entradas/Saídas")
+        toast.error("Ocorreu um erro ao cadastrar saídas");
       }
     })();
   };
 
+  const footerButtons = () => {
+    return (
+      <>
+        <button className="btn btn-secondary" onClick={toggle}>
+          Fechar
+        </button>
+      </>
+    );
+  };
+
   return (
     <>
-      <Content title="Entradas/Saidas" action="Cadastro">
+      <Modal
+        title="Saidas"
+        isOpen={isOpen}
+        footerButtons={footerButtons()}
+      >
         <FormModal label="Formulário de cadastro" color="warning">
           <form className="form" onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-group">
-              <div className="row">
-                <div className="col-xs-12">
-                  <label htmlFor="">Descrição Entrada</label>
-                  <input
-                    type="text"
-                    className={`form-control ${
-                      errors.descricaoEntrada ? "error-input" : ""
-                    }`}
-                    placeholder="Informe a descrição da entrada"
-                    {...register("descricaoEntrada", { required: true })}
-                  />
-                  {errors.descricaoEntrada?.type === "required" && (
-                    <span className="help-block">Campo obrigatório</span>
-                  )}
-                </div>
-              </div>
-            </div>
             <div className="form-group">
               <div className="row">
                 <div className="col-xs-6">
@@ -68,7 +59,7 @@ const CadastroEntradaSaida = (props) => {
                       errors.descricaoSaida ? "error-input" : ""
                     }`}
                     placeholder="Informe a descrição da saída"
-                    {...register("descricaoSaida", { required: true })}
+                    {...register("descricao", { required: true })}
                   />
                   {errors.descricaoSaida?.type === "required" && (
                     <span className="help-block">Campo obrigatório</span>
@@ -95,9 +86,9 @@ const CadastroEntradaSaida = (props) => {
             <FormButton label="Cadastrar" color="success" />
           </form>
         </FormModal>
-      </Content>
+      </Modal>
     </>
   );
 };
 
-export default CadastroEntradaSaida;
+export default CadastroSaidas;

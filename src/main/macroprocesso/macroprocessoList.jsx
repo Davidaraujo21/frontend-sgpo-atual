@@ -57,7 +57,7 @@ const MacroprocessoList = (props) => {
             <FiltroMacroprocesso handleFiltro={handleFiltro} />
           }
         >
-          <Table headers={["Nome", "Código", "Componente primário"]}>
+          <Table headers={["Nome", "Código", "Componente primário", "Ações"]}>
             {macroprocessos
               ? macroprocessos.map((macroprocessoContent) => (
                   <tr className="row">

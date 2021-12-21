@@ -3,6 +3,7 @@ import "admin-lte/plugins/jQueryUI/jquery-ui.min";
 import "admin-lte/plugins/fastclick/fastclick";
 import "admin-lte/plugins/slimScroll/jquery.slimscroll.min";
 import "admin-lte/dist/js/app.min";
+import "admin-lte/bootstrap/js/bootstrap.min.js";
 
 import "font-awesome/css/font-awesome.min.css";
 import "ionicons/dist/css/ionicons.min.css";

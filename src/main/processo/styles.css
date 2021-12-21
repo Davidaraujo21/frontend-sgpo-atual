@@ -1,3 +1,30 @@
 .multiselect{
     overflow-x: auto!important;
 }
+
+.div-multiselect{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.items{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #38d3fa;
+    color: white;
+    padding: 4px;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.local-items{
+    margin-top: 5px;
+    overflow-y:auto;
+    overflow-x: auto;
+    max-height: 100px;
+    min-height: 100px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}

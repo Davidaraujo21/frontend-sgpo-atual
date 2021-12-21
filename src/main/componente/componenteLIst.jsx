@@ -57,7 +57,7 @@ const ComponenteList = (props) => {
             <FiltroComponente handleFiltro={handleFiltro} />
           }
         >
-          <Table headers={["Nome", "Código", "Tipo"]}>
+          <Table headers={["Nome", "Código", "Tipo", "Ações"]}>
             {componentes
               ? componentes.map((componenteContent) => (
                   <tr className="row">

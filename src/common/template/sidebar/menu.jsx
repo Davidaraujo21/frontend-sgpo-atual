@@ -17,13 +17,6 @@ const Menu = () =>{
                     <MenuItem path="/listaMacroprocessos" label="Visualizar macroprocessos" icon="list"/>
                 </MenuTree>
                 <MenuTree label="Processos" icon="book">
-                    <MenuTree label="Informações processos" icon="book" submenu>
-                        <MenuItem path="/cadastroParte" label="Cadastrar partes" icon="plus" />
-                        <MenuItem path="/cadastroDirecionador" label="Cadastrar direcionadores" icon="plus" />
-                        <MenuItem path="/cadastroFerramentaMaterial" label="Cadastrar materiais" icon="plus" />
-                        <MenuItem path="/cadastroCliente" label="Cadastrar clientes" icon="plus" />
-                        <MenuItem path="/cadastroEntradaSaida" label="Cadastrar Entradas/Saidas" icon="plus" />
-                    </MenuTree>
                     <MenuItem path="/cadastroProcesso" label="Cadastrar processos" icon="plus"/>
                     <MenuItem path="/listaProcessos" label="Visualizar processos" icon="list"/>
                 </MenuTree>

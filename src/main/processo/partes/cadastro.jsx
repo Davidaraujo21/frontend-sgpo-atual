@@ -6,8 +6,9 @@ import "./styles.css";
 import FormButton from "../../../common/template/form/formButton";
 import api from "../../../services/api";
 import { toast } from "react-toastify";
+import Modal from "../../../common/template/modal/modal";
 
-const CadastroPartes = (props) => {
+const CadastroPartes = ({ isOpen, toggle, append }) => {
   const {
     register,
     handleSubmit,
@@ -15,21 +16,33 @@ const CadastroPartes = (props) => {
     reset,
   } = useForm();
 
-  const onSubmit = (data) => {
-    (async function(){
-        try{
-            await api.post("partes/", data)
-            reset()
-            toast.success("Parte cadastrada com sucesso")
-        }catch(err){
-            toast.error("Ocorreu um erro ao cadastrar a parte")
-        }   
-    })()
+  const onSubmit = (dataObj) => {
+    (async function () {
+      try {
+        const { data } = await api.post("partes/", dataObj);
+        append(data);
+        reset();
+        toggle();
+        toast.success("Parte cadastrada com sucesso");
+      } catch (err) {
+        toast.error("Ocorreu um erro ao cadastrar a parte");
+      }
+    })();
+  };
+
+  const footerButtons = () => {
+    return (
+      <>
+        <button className="btn btn-secondary" onClick={toggle}>
+          Fechar
+        </button>
+      </>
+    );
   };
 
   return (
     <>
-      <Content title="Partes" action="Cadastro">
+      <Modal title="Partes" isOpen={isOpen} footerButtons={footerButtons()}>
         <FormModal label="Formulário de cadastro" color="warning">
           <form className="form partes" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
@@ -38,7 +51,9 @@ const CadastroPartes = (props) => {
                   <label htmlFor="">Nome da parte</label>
                   <input
                     type="text"
-                    className={`form-control ${errors.nomeParte ? "error-input" : ""}`}
+                    className={`form-control ${
+                      errors.nomeParte ? "error-input" : ""
+                    }`}
                     placeholder="Insira o nome da parte"
                     {...register("nomeParte", { required: true })}
                   />
@@ -54,7 +69,9 @@ const CadastroPartes = (props) => {
                   <label htmlFor="">Sigla</label>
                   <input
                     type="text"
-                    className={`form-control ${errors.sigla ? "error-input" : ""}`}
+                    className={`form-control ${
+                      errors.sigla ? "error-input" : ""
+                    }`}
                     placeholder="Insira a sigla"
                     {...register("sigla", { required: true, maxLength: 20 })}
                   />
@@ -68,7 +85,9 @@ const CadastroPartes = (props) => {
                 <div className="col-xs-6">
                   <label htmlFor="">Tipo da parte</label>
                   <select
-                    className={`form-control ${errors.tipoParte ? "error-input" : ""}`}
+                    className={`form-control ${
+                      errors.tipoParte ? "error-input" : ""
+                    }`}
                     {...register("tipoParte", { required: true })}
                   >
                     <option value="" defaultValue>
@@ -86,10 +105,10 @@ const CadastroPartes = (props) => {
                 </div>
               </div>
             </div>
-            <FormButton label="Cadastrar" color="success"/>
+            <FormButton label="Cadastrar" color="success" />
           </form>
         </FormModal>
-      </Content>
+      </Modal>
     </>
   );
 };

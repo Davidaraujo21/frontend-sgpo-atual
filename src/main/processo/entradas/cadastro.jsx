@@ -8,7 +8,7 @@ import api from "../../../services/api";
 import { toast } from "react-toastify";
 import Modal from "../../../common/template/modal/modal";
 
-const CadastroMaterial = ({isOpen, toggle, append}) => {
+const CadastroEntradas = ({ isOpen, toggle, append }) => {
   const {
     register,
     handleSubmit,
@@ -19,13 +19,13 @@ const CadastroMaterial = ({isOpen, toggle, append}) => {
   const onSubmit = (dataObj) => {
     (async function () {
       try {
-        const {data} = await api.post("ferramentas/", dataObj);
-        append(data)
-        reset()
-        toggle()
-        toast.success("Ferramenta/materiais cadastro com sucesso");
+        const {data}= await api.post("entradas/", dataObj);
+        append(data);
+        reset();
+        toggle();
+        toast.success("Entradas/Saídas cadastrado com sucesso");
       } catch (err) {
-        toast.success("Ocorreu um erro ao cadastrar ferramenta/materiais");
+        toast.error("Ocorreu um erro ao cadastrar Entradas/Saídas");
       }
     })();
   };
@@ -33,7 +33,9 @@ const CadastroMaterial = ({isOpen, toggle, append}) => {
   const footerButtons = () => {
     return (
       <>
-        <button className="btn btn-secondary" onClick={toggle}>Fechar</button>
+        <button className="btn btn-secondary" onClick={toggle}>
+          Fechar
+        </button>
       </>
     );
   };
@@ -41,7 +43,7 @@ const CadastroMaterial = ({isOpen, toggle, append}) => {
   return (
     <>
       <Modal
-        title="Ferramentas/Materiais"
+        title="Entradas/Saidas"
         isOpen={isOpen}
         footerButtons={footerButtons()}
       >
@@ -50,22 +52,22 @@ const CadastroMaterial = ({isOpen, toggle, append}) => {
             <div className="form-group">
               <div className="row">
                 <div className="col-xs-12">
-                  <label htmlFor="">Descrição</label>
+                  <label htmlFor="">Descrição Entrada</label>
                   <input
                     type="text"
                     className={`form-control ${
-                      errors.descricao ? "error-input" : ""
+                      errors.descricaoEntrada ? "error-input" : ""
                     }`}
-                    placeholder="Informe a descrição da ferramenta ou material"
+                    placeholder="Informe a descrição da entrada"
                     {...register("descricao", { required: true })}
                   />
-                  {errors.descricao?.type === "required" && (
+                  {errors.descricaoEntrada?.type === "required" && (
                     <span className="help-block">Campo obrigatório</span>
                   )}
                 </div>
               </div>
             </div>
-            <FormButton label="Cadastrar" color="success" /> 
+            <FormButton label="Cadastrar" color="success" />
           </form>
         </FormModal>
       </Modal>
@@ -73,4 +75,4 @@ const CadastroMaterial = ({isOpen, toggle, append}) => {
   );
 };
 
-export default CadastroMaterial;
+export default CadastroEntradas;

@@ -8,6 +8,13 @@ import { toast } from "react-toastify";
 import LinkCadastro from "../../common/template/form/linkCadastro";
 import { useHistory } from "react-router-dom";
 import FormButton from "../../common/template/form/formButton";
+import CadastroMaterial from "./ferramenta/cadastro";
+import "./styles.css";
+import CadastroPartes from "./partes/cadastro";
+import CadastroCliente from "./cliente/cliente";
+import CadastroDirecionador from "./direcionadores/cadastro";
+import CadastroEntradas from "./entradas/cadastro";
+import CadastroSaidas from "./saidas/cadastro"
 
 const CadastroProcesso = () => {
   const {
@@ -26,69 +33,221 @@ const CadastroProcesso = () => {
   const [clientes, setClientes] = useState([]);
   const [isSubmit, setIsSubmit] = useState(false);
   const history = useHistory();
+  const [isOpenFerramentas, setIsOpenFerramentas] = useState(false);
+  const [isOpenPartes, setIsOpenPartes] = useState(false);
+  const [isOpenClientes, setIsOpenClientes] = useState(false);
+  const [isOpenDirecionadores, setIsOpenDirecionadores] = useState(false);
+  const [isOpenEntradas, setIsOpenEntradas] = useState(false);
+  const [isOpenSaidas, setIsOpenSaidas] = useState(false);
 
   const onSubmit = async (data) => {
-    setIsSubmit(true);
-    try {
-      const processo_obj = {
-        ...data,
-      };
-      await api.post("processos/", processo_obj);
-      reset({ codigo: "" });
-      toast.success("Processo cadastrado com sucesso");
-      setIsSubmit(false);
-      history.push("/listaProcessos");
-    } catch (err) {
-      toast.error("Ocorreu um erro ao cadastrar processo");
-      setIsSubmit(false);
+    if (
+      ferramentas.length > 0 &&
+      partes.length > 0 &&
+      clientes.length > 0 &&
+      entradas.length > 0 &&
+      saidas.length > 0
+    ) {
+      setIsSubmit(true);
+      const ferr = ferramentas.map((ferr) => ferr.id);
+      const part = partes.map((part) => part.id);
+      const dir = direcionadores.map((dir) => dir.id)
+      const client = clientes.map((cliente) => cliente.id);
+      const entr = entradas.map((entrada) => entrada.id)
+      const said = saidas.map((saida) => saida.id)
+      try {
+        const processo_obj = {
+          ...data,
+          ferramenta: ferr,
+          parte: part,
+          direcionador: dir,
+          clientes: client,
+          entradas: entr,
+          saidas: said
+        };
+        await api.post("processos/", processo_obj);
+        reset({ codigo: "" });
+        setFerramentas([]);
+        setPartes([]);
+        setClientes([]);
+        setEntradas([]);
+        setSaidas([]);
+        toast.success("Processo cadastrado com sucesso");
+        setIsSubmit(false);
+        history.push("/listaProcessos");
+      } catch (err) {
+        toast.error("Ocorreu um erro ao cadastrar processo");
+        setIsSubmit(false);
+      }
+    } else {
+      toast.error("Informe todas as informações necessárias para o processo");
     }
   };
 
   useEffect(() => {
     (async function () {
       try {
-        const macroprocessoData = api.get("macroprocessos/");
-        const direcionadoresData = api.get("direcionadores/");
-        const ferramentasData = api.get("ferramentas/");
-        const partesData = api.get("partes/");
-        const clientesData = api.get("clientes/");
-        const entradasData = api.get("entradas/");
-        const saidasData = api.get("saidas/");
-
-        const [
-          macroprocessos,
-          direcionadores,
-          ferramentas,
-          partes,
-          clientes,
-          entradas,
-          saidas,
-        ] = await Promise.all([
-          macroprocessoData,
-          direcionadoresData,
-          ferramentasData,
-          partesData,
-          clientesData,
-          entradasData,
-          saidasData,
-        ]);
-
-        setMacroprocessos(macroprocessos.data);
-        setDirecionadores(direcionadores.data);
-        setFerramentas(ferramentas.data);
-        setPartes(partes.data);
-        setClientes(clientes.data);
-        setEntradas(entradas.data);
-        setSaidas(saidas.data);
+        const {data} = await api.get("macroprocessos/");
+        setMacroprocessos(data);
       } catch (err) {
         toast.error("Ocorreu um erro ao carregar dados nos campos");
       }
     })();
   }, []);
 
+  const toggleFerramentas = () => {
+    setIsOpenFerramentas(!isOpenFerramentas);
+  };
+
+  const togglePartes = () => {
+    setIsOpenPartes(!isOpenPartes);
+  };
+
+  const toggleClientes = () => {
+    setIsOpenClientes(!isOpenClientes);
+  };
+
+  const toggleDirecionadores = () => {
+    setIsOpenDirecionadores(!isOpenDirecionadores);
+  };
+
+  const toggleEntradas = () => {
+    setIsOpenEntradas(!isOpenEntradas);
+  };
+
+  const toggleSaidas = () =>{
+    setIsOpenSaidas(!isOpenSaidas)
+  }
+
+  const handleFerramentas = (ferr) => {
+    setFerramentas([...ferramentas, ferr]);
+  };
+
+  const handlePartes = (part) => {
+    setPartes([...partes, part]);
+  };
+
+  const handleClientes = (cliente) => {
+    setClientes([...clientes, cliente]);
+  };
+
+  const handleDirecionadores = (dir) => {
+    setDirecionadores([...direcionadores, dir]);
+  };
+
+  const handleEntradas = (entrada) => {
+    setEntradas([...entradas, entrada]);
+  };
+
+  const handleSaidas = (saida) =>{
+    setSaidas([...saidas, saida]);
+  }
+
+  const handleDelFerramentas = async (id) => {
+    try {
+      let arr = [];
+      await api.delete(`ferramentas/${id}/`);
+      arr = ferramentas.filter((ferr) => ferr.id !== id);
+      setFerramentas(arr);
+    } catch (err) {
+      toast.error("Ocorreu um erro ao deletar ferramentas/materiais");
+    }
+  };
+
+  const handleDelPartes = async (id) => {
+    try {
+      let arr = [];
+      await api.delete(`partes/${id}/`);
+      arr = partes.filter((part) => part.id !== id);
+      setPartes(arr);
+    } catch (err) {
+      toast.error("Ocorreu um erro ao deletar a parte");
+    }
+  };
+
+  const handleDelCliente = async (id) => {
+    try {
+      let arr = [];
+      await api.delete(`clientes/${id}/`);
+      arr = clientes.filter((part) => part.id !== id);
+      setClientes(arr);
+    } catch (err) {
+      toast.error("Ocorreu um erro ao deletar o cliente");
+    }
+  };
+
+  const handleDelDirecionadores = async (id) => {
+    try {
+      let arr = [];
+      await api.delete(`direcionadores/${id}/`);
+      arr = direcionadores.filter((dir) => dir.id !== id);
+      setDirecionadores(arr);
+    } catch (err) {
+      toast.error("Ocorreu um erro ao deletar o direcionador");
+    }
+  };
+
+  const handleDelEntradas = async (id) => {
+    try {
+      let arr = [];
+      await api.delete(`entradas/${id}/`)
+      arr = entradas.filter((entrada) => entrada.id !== id)
+      setEntradas(arr);
+    } catch (err) {
+      toast.error("Ocorreu um erro ao deletar a entrada");
+    }
+  };
+
+  const handleDelSaidas = async (id) => {
+    try {
+      let arr = [];
+      await api.delete(`saidas/${id}/`)
+      arr = saidas.filter((saida) => saida.id !== id)
+      setSaidas(arr);
+    } catch (err) {
+      toast.error("Ocorreu um erro ao deletar a saída");
+    }
+  };
+
   return (
     <>
       <Content title="Processo" action="Cadastro">
+        <CadastroMaterial
+          isOpen={isOpenFerramentas}
+          toggle={toggleFerramentas}
+          append={handleFerramentas}
+        />
+
+        <CadastroPartes
+          isOpen={isOpenPartes}
+          toggle={togglePartes}
+          append={handlePartes}
+        />
+
+        <CadastroCliente
+          isOpen={isOpenClientes}
+          toggle={toggleClientes}
+          append={handleClientes}
+        />
+
+        <CadastroDirecionador
+          isOpen={isOpenDirecionadores}
+          toggle={toggleDirecionadores}
+          append={handleDirecionadores}
+        />
+
+        <CadastroEntradas
+          isOpen={isOpenEntradas}
+          toggle={toggleEntradas}
+          append={handleEntradas}
+        />
+
+        <CadastroSaidas 
+          isOpen={isOpenSaidas}
+          toggle={toggleSaidas}
+          append={handleSaidas}
+        />
+
         <FormModal
           label="Formulário de cadastro"
           color="primary"
@@ -272,67 +431,91 @@ const CadastroProcesso = () => {
             <div className="form-group">
               <div className="row">
                 <div className="col-xs-4">
-                  <label htmlFor="">Partes interessadas</label>
-                  <select
-                    multiple
-                    className={`form-control multiselect ${
-                      errors.parte ? "error-input" : ""
-                    }`}
-                    {...register("parte", { required: true })}
-                  >
-                    {partes.map((partes) => (
-                      <option value={partes.id}>{partes.nomeParte}</option>
+                  <div className="div-multiselect">
+                    <label htmlFor="">Partes interessadas</label>
+                    <button
+                      type="button"
+                      className="btn btn-info btn-sm"
+                      onClick={togglePartes}
+                    >
+                      <i className="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                  <div className="local-items">
+                    {partes.map((part) => (
+                      <div className="items" key={part.id}>
+                        {part.nomeParte}
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDelPartes(part.id)}
+                        >
+                          Deletar
+                        </button>
+                      </div>
                     ))}
-                  </select>
-                  <LinkCadastro path={"/cadastroParte"} />
-                  {errors.parte?.type === "required" && (
-                    <span className="help-block">Campo obrigatório</span>
-                  )}
+                  </div>
                 </div>
                 <div className="col-xs-4">
-                  <label htmlFor="">Direcionadores</label>
-                  <select
-                    multiple
-                    className={`form-control ${
-                      errors.direcionador ? "error-input" : ""
-                    }`}
-                    {...register("direcionador", { required: true })}
-                  >
+                  <div className="div-multiselect">
+                    <label htmlFor="">Direcionadores</label>
+                    <button
+                      type="button"
+                      className="btn btn-info btn-sm"
+                      onClick={toggleDirecionadores}
+                    >
+                      <i className="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                  <div className="local-items">
                     {direcionadores.map((dir) => (
-                      <option value={dir.id}>{dir.orgao}</option>
+                      <div className="items" key={dir.id}>
+                        {dir.orgao}
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDelDirecionadores(dir.id)}
+                        >
+                          Deletar
+                        </button>
+                      </div>
                     ))}
-                  </select>
-                  <LinkCadastro path={"/cadastroDirecionador"} />
-                  {errors.direcionador?.type === "required" && (
-                    <span className="help-block">Campo obrigatório</span>
-                  )}
+                  </div>
                 </div>
                 <div className="col-xs-4">
-                  <label htmlFor="">Ferramentas/materiais</label>
-                  <select
-                    multiple
-                    className={`form-control ${
-                      errors.ferramenta ? "error-input" : ""
-                    }`}
-                    {...register("ferramenta", { required: true })}
-                  >
-                    {ferramentas.map((fer) => (
-                      <option value={fer.id}>{fer.descricao}</option>
+                  <div className="div-multiselect">
+                    <label htmlFor="">Ferramentas/materiais</label>
+                    <button
+                      type="button"
+                      className="btn btn-info btn-sm"
+                      onClick={toggleFerramentas}
+                    >
+                      <i className="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                  <div className="local-items">
+                    {ferramentas.map((ferr) => (
+                      <div className="items" key={ferr.id}>
+                        {ferr.descricao}
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDelFerramentas(ferr.id)}
+                        >
+                          Deletar
+                        </button>
+                      </div>
                     ))}
-                  </select>
-                  <LinkCadastro path={"/cadastroFerramentaMaterial"} />
-                  {errors.ferramenta?.type === "required" && (
-                    <span className="help-block">Campo obrigatório</span>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>
             <div className="form-group">
               <div className="row">
-                <div className="col-xs-6">
+                <div className="col-xs-8">
                   <label htmlFor="">Etapas/Atividades</label>
                   <textarea
-                    rows="4"
+                    rows="5"
                     className={`form-control multiselect ${
                       errors.etapas ? "error-input" : ""
                     }`}
@@ -343,63 +526,87 @@ const CadastroProcesso = () => {
                     <span className="help-block">Campo obrigatório</span>
                   )}
                 </div>
-                <div className="col-xs-6">
-                  <label>Clientes</label>
-                  <select
-                    multiple
-                    className={`form-control multiselect ${
-                      errors.clientes ? "error-input" : ""
-                    }`}
-                    {...register("clientes", { required: true })}
-                  >
+                <div className="col-xs-4">
+                  <div className="div-multiselect">
+                    <label>Clientes</label>
+                    <button
+                      type="button"
+                      className="btn btn-info btn-sm"
+                      onClick={toggleClientes}
+                    >
+                      <i className="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                  <div className="local-items">
                     {clientes.map((cliente) => (
-                      <option value={cliente.id}>{cliente.nome}</option>
+                      <div className="items" key={cliente.id}>
+                        {cliente.nome}
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDelCliente(cliente.id)}
+                        >
+                          Deletar
+                        </button>
+                      </div>
                     ))}
-                  </select>
-                  <LinkCadastro path={"/cadastroCliente"} />
-                  {errors.clientes?.type === "required" && (
-                    <span className="help-block">Campo obrigatório</span>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>
             <div className="form-group">
               <div className="row">
                 <div className="col-xs-6">
-                  <label>Entradas</label>
-                  <select
-                    multiple
-                    className={`form-control multiselect ${
-                      errors.entradas ? "error-input" : ""
-                    }`}
-                    {...register("entradas", { required: true })}
-                  >
-                    {entradas.map((entrada) => (
-                      <option value={entrada.id}>{entrada.descricao}</option>
+                  <div className="div-multiselect">
+                    <label>Entradas</label>
+                    <button
+                      type="button"
+                      className="btn btn-info btn-sm"
+                      onClick={toggleEntradas}
+                    >
+                      <i className="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                  <div className="local-items">
+                    {entradas.map((ent) => (
+                      <div className="items" key={ent.id}>
+                        {ent.descricao}
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDelEntradas(ent.id)}
+                        >
+                          Deletar
+                        </button>
+                      </div>
                     ))}
-                  </select>
-                  <LinkCadastro path={"/cadastroEntradaSaida"} />
-                  {errors.clientes?.type === "required" && (
-                    <span className="help-block">Campo obrigatório</span>
-                  )}
+                  </div>
                 </div>
                 <div className="col-xs-6">
-                  <label>Saídas</label>
-                  <select
-                    multiple
-                    className={`form-control multiselect ${
-                      errors.saidas ? "error-input" : ""
-                    }`}
-                    {...register("saidas", { required: true })}
-                  >
+                  <div className="div-multiselect">
+                    <label>Saídas</label>
+                    <button
+                      type="button"
+                      className="btn btn-info btn-sm"
+                      onClick={toggleSaidas}
+                    >
+                      <i className="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                  <div className="local-items">
                     {saidas.map((saida) => (
-                      <option value={saida.id}>{saida.descricao}</option>
+                      <div className="items" key={saida.id}>
+                        {saida.descricao}
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDelSaidas(saida.id)}
+                        >
+                          Deletar
+                        </button>
+                      </div>
                     ))}
-                  </select>
-                  <LinkCadastro path={"/cadastroEntradaSaida"} />
-                  {errors.saidas?.type === "required" && (
-                    <span className="help-block">Campo obrigatório</span>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>

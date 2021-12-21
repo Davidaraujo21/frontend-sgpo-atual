@@ -12,7 +12,7 @@
     "bootstrap": "^4.6.0",
     "font-awesome": "^4.7.0",
     "ionicons": "3.0.0",
-    "jquery": "3.3.1",
+    "jquery": "^1.10.0",
     "jwt-decode": "^3.1.2",
     "react": "^17.0.2",
     "react-bootstrap": "^1.5.2",
