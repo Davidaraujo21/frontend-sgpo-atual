@@ -7,14 +7,22 @@ import InputMask from "react-input-mask";
 import "./styles.css";
 import { toast } from "react-toastify";
 import FormButton from "../../../common/template/form/formButton";
+import CadastroMaterial from "../ferramenta/cadastro";
+import CadastroPartes from "../partes/cadastro";
+import CadastroCliente from "../cliente/cliente";
+import CadastroDirecionador from "../direcionadores/cadastro";
+import CadastroEntradas from "../entradas/cadastro";
+import CadastroSaidas from "../saidas/cadastro";
+import MultiSelect from "../../../common/template/form/formMultiSelect";
+import "../styles.css";
 
-const ProcessoDetail = ({id, toggleIsEdit}) => {
+const ProcessoDetail = ({ id, toggleIsEdit }) => {
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-    setValue
+    setValue,
   } = useForm();
 
   const [macroprocessos, setMacroprocessos] = useState([]);
@@ -23,13 +31,15 @@ const ProcessoDetail = ({id, toggleIsEdit}) => {
   const [ferramentas, setFerramentas] = useState([]);
   const [clientes, setClientes] = useState([]);
   const [macroprocesso, setMacroprocesso] = useState();
-  const [partesSelectDados, setPartesSelectDados] = useState([]);
-  const [direcionadoresSelectDados, setDirecionadoresSelectDados] = useState(
-    []
-  );
-  const [ferramentasSelectDados, setFerramentasSelectDados] = useState([]);
-  const [clientesSelectDados, setClientesSelectDados] = useState([]);
+  const [entradas, setEntradas] = useState([]);
+  const [saidas, setSaidas] = useState([]);
   const [isSubmit, setIsSubmit] = useState(false);
+  const [isOpenFerramentas, setIsOpenFerramentas] = useState(false);
+  const [isOpenPartes, setIsOpenPartes] = useState(false);
+  const [isOpenClientes, setIsOpenClientes] = useState(false);
+  const [isOpenDirecionadores, setIsOpenDirecionadores] = useState(false);
+  const [isOpenEntradas, setIsOpenEntradas] = useState(false);
+  const [isOpenSaidas, setIsOpenSaidas] = useState(false);
 
   useEffect(() => {
     (async function () {
@@ -51,6 +61,8 @@ const ProcessoDetail = ({id, toggleIsEdit}) => {
           direcionador,
           ferramenta,
           clientes,
+          entradas,
+          saidas,
         } = data;
         setValue("nome_processo", nome_processo);
         setValue("gestorPrincipal", gestorPrincipal);
@@ -62,17 +74,15 @@ const ProcessoDetail = ({id, toggleIsEdit}) => {
         setValue("proad", proad);
         setValue("versaop", versaop);
         setValue("etapas", etapas);
-        setValue("macroProcesso_primario", macroProcesso_primario.id)
-        setValue("parte", parte.map((p) => p.id));
-        setValue("direcionador", direcionador.map((d) => d.id));
-        setValue("ferramenta", ferramenta.map((f) => f.id));
-        setValue("clientes", clientes.map((c) => c.id));
+        setValue("macroProcesso_primario", macroProcesso_primario.id);
 
         setMacroprocesso(macroProcesso_primario);
-        setPartesSelectDados(parte);
-        setFerramentasSelectDados(ferramenta);
-        setClientesSelectDados(clientes);
-        setDirecionadoresSelectDados(direcionador);
+        setPartes(parte);
+        setFerramentas(ferramenta);
+        setClientes(clientes);
+        setDirecionadores(direcionador);
+        setEntradas(entradas);
+        setSaidas(saidas);
       } catch (err) {
         toast.error("Ocorreu um erro ao obter os dados do macroprocesso");
       }
@@ -83,25 +93,9 @@ const ProcessoDetail = ({id, toggleIsEdit}) => {
     (async function () {
       try {
         const macroprocessoData = api.get("macroprocessos/");
-        const direcionadoresData = api.get("direcionadores/");
-        const ferramentasData = api.get("ferramentas/");
-        const partesData = api.get("partes/");
-        const clientesData = api.get("clientes/");
-
-        const [macroprocessos, direcionadores, ferramentas, partes, clientes] =
-          await Promise.all([
-            macroprocessoData,
-            direcionadoresData,
-            ferramentasData,
-            partesData,
-            clientesData,
-          ]);
+        const [macroprocessos] = await Promise.all([macroprocessoData]);
 
         setMacroprocessos(macroprocessos.data);
-        setDirecionadores(direcionadores.data);
-        setFerramentas(ferramentas.data);
-        setPartes(partes.data);
-        setClientes(clientes.data);
       } catch (err) {
         toast.error("Ocorreu um erro ao carregar dados nos campos");
       }
@@ -109,17 +103,192 @@ const ProcessoDetail = ({id, toggleIsEdit}) => {
   }, []);
 
   const onSubmit = async (data) => {
+    if (
+      ferramentas.length > 0 &&
+      partes.length > 0 &&
+      clientes.length > 0 &&
+      entradas.length > 0 &&
+      saidas.length > 0 &&
+      direcionadores.length > 0
+    ) {
+      const ferr = ferramentas.map((ferr) => ferr.id);
+      const part = partes.map((part) => part.id);
+      const dir = direcionadores.map((dir) => dir.id);
+      const client = clientes.map((cliente) => cliente.id);
+      const entr = entradas.map((entrada) => entrada.id);
+      const said = saidas.map((saida) => saida.id);
+      try {
+        const processo_obj = {
+          ...data,
+          ferramenta: ferr,
+          parte: part,
+          direcionador: dir,
+          clientes: client,
+          entradas: entr,
+          saidas: said,
+        };
+        await api.patch(`processos/${id}/`, processo_obj);
+        setFerramentas([]);
+        setPartes([]);
+        setClientes([]);
+        setEntradas([]);
+        setSaidas([]);
+        toast.success("Processo alterado com sucesso");
+        toggleIsEdit();
+      } catch (err) {
+        toast.error("Ocorreu um erro ao alterar o processo");
+      }
+    } else {
+      toast.error("Informe todas as informações necessárias para o processo");
+    }
+  };
+
+  const toggleFerramentas = () => {
+    setIsOpenFerramentas(!isOpenFerramentas);
+  };
+
+  const handleFerramentas = (ferr) => {
+    setFerramentas([...ferramentas, ferr]);
+  };
+
+  const togglePartes = () => {
+    setIsOpenPartes(!isOpenPartes);
+  };
+
+  const handlePartes = (part) => {
+    setPartes([...partes, part]);
+  };
+
+  const toggleClientes = () => {
+    setIsOpenClientes(!isOpenClientes);
+  };
+
+  const handleClientes = (cliente) => {
+    setClientes([...clientes, cliente]);
+  };
+
+  const toggleDirecionadores = () => {
+    setIsOpenDirecionadores(!isOpenDirecionadores);
+  };
+
+  const handleDirecionadores = (dir) => {
+    setDirecionadores([...direcionadores, dir]);
+  };
+
+  const toggleEntradas = () => {
+    setIsOpenEntradas(!isOpenEntradas);
+  };
+
+  const handleEntradas = (entrada) => {
+    setEntradas([...entradas, entrada]);
+  };
+
+  const toggleSaidas = () => {
+    setIsOpenSaidas(!isOpenSaidas);
+  };
+
+  const handleSaidas = (saida) => {
+    setSaidas([...saidas, saida]);
+  };
+
+  const handleDelFerramentas = async (id) => {
     try {
-      await api.patch(`processos/${id}/`, data);
-      toast.success("Processo alterado com sucesso");
-      toggleIsEdit();
+      let arr = [];
+      arr = ferramentas.filter((ferr) => ferr.id !== id);
+      setFerramentas(arr);
     } catch (err) {
-      toast.error("Ocorreu um erro ao alterar o processo");
+      toast.error("Ocorreu um erro ao deletar ferramentas/materiais");
+    }
+  };
+
+  const handleDelPartes = async (id) => {
+    try {
+      let arr = [];
+      arr = partes.filter((part) => part.id !== id);
+      setPartes(arr);
+    } catch (err) {
+      toast.error("Ocorreu um erro ao deletar a parte");
+    }
+  };
+
+  const handleDelCliente = async (id) => {
+    try {
+      let arr = [];
+      arr = clientes.filter((part) => part.id !== id);
+      setClientes(arr);
+    } catch (err) {
+      toast.error("Ocorreu um erro ao deletar o cliente");
+    }
+  };
+
+  const handleDelDirecionadores = async (id) => {
+    try {
+      let arr = [];
+      arr = direcionadores.filter((dir) => dir.id !== id);
+      setDirecionadores(arr);
+    } catch (err) {
+      toast.error("Ocorreu um erro ao deletar o direcionador");
+    }
+  };
+
+  const handleDelEntradas = async (id) => {
+    try {
+      let arr = [];
+      arr = entradas.filter((entrada) => entrada.id !== id);
+      setEntradas(arr);
+    } catch (err) {
+      toast.error("Ocorreu um erro ao deletar a entrada");
+    }
+  };
+
+  const handleDelSaidas = async (id) => {
+    try {
+      let arr = [];
+      arr = saidas.filter((saida) => saida.id !== id);
+      setSaidas(arr);
+    } catch (err) {
+      toast.error("Ocorreu um erro ao deletar a saída");
     }
   };
 
   return (
     <>
+      <CadastroMaterial
+        isOpen={isOpenFerramentas}
+        toggle={toggleFerramentas}
+        append={handleFerramentas}
+      />
+
+      <CadastroPartes
+        isOpen={isOpenPartes}
+        toggle={togglePartes}
+        append={handlePartes}
+      />
+
+      <CadastroCliente
+        isOpen={isOpenClientes}
+        toggle={toggleClientes}
+        append={handleClientes}
+      />
+
+      <CadastroDirecionador
+        isOpen={isOpenDirecionadores}
+        toggle={toggleDirecionadores}
+        append={handleDirecionadores}
+      />
+
+      <CadastroEntradas
+        isOpen={isOpenEntradas}
+        toggle={toggleEntradas}
+        append={handleEntradas}
+      />
+
+      <CadastroSaidas
+        isOpen={isOpenSaidas}
+        toggle={toggleSaidas}
+        append={handleSaidas}
+      />
+
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group">
           <div className="row">
@@ -297,85 +466,40 @@ const ProcessoDetail = ({id, toggleIsEdit}) => {
         <div className="form-group">
           <div className="row">
             <div className="col-xs-4">
-              <label htmlFor="">Partes interessadas</label>
-              <select
-                multiple
-                className={`form-control multiselect ${
-                  errors.parte ? "error-input" : ""
-                }`}
-                {...register("parte", { required: true })}
-              >
-                {partes.map((partes) =>
-                  partesSelectDados.find((ps) => ps.id === partes.id) ? (
-                    <option selected value={partes.id}>
-                      {partes.nomeParte}
-                    </option>
-                  ) : (
-                    <option value={partes.id}>{partes.nomeParte}</option>
-                  )
-                )}
-              </select>
-              <LinkCadastro path={"/cadastroParte"} />
-              {errors.parte?.type === "required" && (
-                <span className="help-block">Campo obrigatório</span>
-              )}
+              <MultiSelect
+                toggle={togglePartes}
+                label={"Partes interessadas"}
+                items={partes}
+                del={(id) => handleDelPartes(id)}
+                descricaoLabel={"nomeParte"}
+              />
             </div>
             <div className="col-xs-4">
-              <label htmlFor="">Direcionadores</label>
-              <select
-                multiple
-                className={`form-control ${
-                  errors.direcionador ? "error-input" : ""
-                }`}
-                {...register("direcionador", { required: true })}
-              >
-                {direcionadores.map((dir) =>
-                  direcionadoresSelectDados.find((ds) => ds.id === dir.id) ? (
-                    <option selected value={dir.id}>
-                      {dir.orgao}
-                    </option>
-                  ) : (
-                    <option value={dir.id}>{dir.orgao}</option>
-                  )
-                )}
-              </select>
-              <LinkCadastro path={"/cadastroDirecionador"} />
-              {errors.direcionador?.type === "required" && (
-                <span className="help-block">Campo obrigatório</span>
-              )}
+              <MultiSelect
+                toggle={toggleDirecionadores}
+                label={"Direcionadores"}
+                items={direcionadores}
+                del={(id) => handleDelDirecionadores(id)}
+                descricaoLabel={"orgao"}
+              />
             </div>
             <div className="col-xs-4">
-              <label htmlFor="">Ferramentas/materiais</label>
-              <select
-                multiple
-                className={`form-control ${
-                  errors.ferramenta ? "error-input" : ""
-                }`}
-                {...register("ferramenta", { required: true })}
-              >
-                {ferramentas.map((fer) =>
-                  ferramentasSelectDados.find((fs) => fs.id === fer.id) ? (
-                    <option selected value={fer.id}>
-                      {fer.descricao}
-                    </option>
-                  ) : (
-                    <option value={fer.id}>{fer.descricao}</option>
-                  )
-                )}
-              </select>
-              <LinkCadastro path={"/cadastroFerramentaMaterial"} />
-              {errors.ferramenta?.type === "required" && (
-                <span className="help-block">Campo obrigatório</span>
-              )}
+              <MultiSelect
+                toggle={toggleFerramentas}
+                label={"Ferramentas/materiais"}
+                items={ferramentas}
+                del={(id) => handleDelFerramentas(id)}
+                descricaoLabel={"descricao"}
+              />
             </div>
           </div>
         </div>
         <div className="form-group">
           <div className="row">
-            <div className="col-xs-6">
+            <div className="col-xs-8">
               <label htmlFor="">Etapas/Atividades</label>
               <textarea
-                rows="4"
+                rows="5"
                 className={`form-control multiselect ${
                   errors.etapas ? "error-input" : ""
                 }`}
@@ -386,29 +510,36 @@ const ProcessoDetail = ({id, toggleIsEdit}) => {
                 <span className="help-block">Campo obrigatório</span>
               )}
             </div>
+            <div className="col-xs-4">
+              <MultiSelect
+                toggle={toggleClientes}
+                label={"Clientes"}
+                items={clientes}
+                del={(id) => handleDelCliente(id)}
+                descricaoLabel={"nome"}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="form-group">
+          <div className="row">
             <div className="col-xs-6">
-              <label>Clientes</label>
-              <select
-                multiple
-                className={`form-control multiselect ${
-                  errors.clientes ? "error-input" : ""
-                }`}
-                {...register("clientes", { required: true })}
-              >
-                {clientes.map((cliente) =>
-                  clientesSelectDados.find((cs) => cs.id === cliente.id) ? (
-                    <option selected value={cliente.id}>
-                      {cliente.nome}
-                    </option>
-                  ) : (
-                    <option value={cliente.id}>{cliente.nome}</option>
-                  )
-                )}
-              </select>
-              <LinkCadastro path={"/cadastroCliente"} />
-              {errors.clientes?.type === "required" && (
-                <span className="help-block">Campo obrigatório</span>
-              )}
+              <MultiSelect
+                toggle={toggleEntradas}
+                label={"Entradas"}
+                items={entradas}
+                del={(id) => handleDelEntradas(id)}
+                descricaoLabel={"descricao"}
+              />
+            </div>
+            <div className="col-xs-6">
+              <MultiSelect
+                toggle={toggleSaidas}
+                label={"Saídas"}
+                items={saidas}
+                del={(id) => handleDelSaidas(id)}
+                descricaoLabel={"descricao"}
+              />
             </div>
           </div>
         </div>

@@ -14,7 +14,8 @@ import CadastroPartes from "./partes/cadastro";
 import CadastroCliente from "./cliente/cliente";
 import CadastroDirecionador from "./direcionadores/cadastro";
 import CadastroEntradas from "./entradas/cadastro";
-import CadastroSaidas from "./saidas/cadastro"
+import CadastroSaidas from "./saidas/cadastro";
+import MultiSelect from "../../common/template/form/formMultiSelect";
 
 const CadastroProcesso = () => {
   const {
@@ -46,15 +47,16 @@ const CadastroProcesso = () => {
       partes.length > 0 &&
       clientes.length > 0 &&
       entradas.length > 0 &&
-      saidas.length > 0
+      saidas.length > 0 &&
+      direcionadores.length > 0
     ) {
       setIsSubmit(true);
       const ferr = ferramentas.map((ferr) => ferr.id);
       const part = partes.map((part) => part.id);
-      const dir = direcionadores.map((dir) => dir.id)
+      const dir = direcionadores.map((dir) => dir.id);
       const client = clientes.map((cliente) => cliente.id);
-      const entr = entradas.map((entrada) => entrada.id)
-      const said = saidas.map((saida) => saida.id)
+      const entr = entradas.map((entrada) => entrada.id);
+      const said = saidas.map((saida) => saida.id);
       try {
         const processo_obj = {
           ...data,
@@ -63,7 +65,7 @@ const CadastroProcesso = () => {
           direcionador: dir,
           clientes: client,
           entradas: entr,
-          saidas: said
+          saidas: said,
         };
         await api.post("processos/", processo_obj);
         reset({ codigo: "" });
@@ -87,7 +89,7 @@ const CadastroProcesso = () => {
   useEffect(() => {
     (async function () {
       try {
-        const {data} = await api.get("macroprocessos/");
+        const { data } = await api.get("macroprocessos/");
         setMacroprocessos(data);
       } catch (err) {
         toast.error("Ocorreu um erro ao carregar dados nos campos");
@@ -115,9 +117,9 @@ const CadastroProcesso = () => {
     setIsOpenEntradas(!isOpenEntradas);
   };
 
-  const toggleSaidas = () =>{
-    setIsOpenSaidas(!isOpenSaidas)
-  }
+  const toggleSaidas = () => {
+    setIsOpenSaidas(!isOpenSaidas);
+  };
 
   const handleFerramentas = (ferr) => {
     setFerramentas([...ferramentas, ferr]);
@@ -139,16 +141,14 @@ const CadastroProcesso = () => {
     setEntradas([...entradas, entrada]);
   };
 
-  const handleSaidas = (saida) =>{
+  const handleSaidas = (saida) => {
     setSaidas([...saidas, saida]);
-  }
+  };
 
   const handleDelFerramentas = async (id) => {
     try {
-      let arr = [];
       await api.delete(`ferramentas/${id}/`);
-      arr = ferramentas.filter((ferr) => ferr.id !== id);
-      setFerramentas(arr);
+      setFerramentas(ferramentas.filter((ferr) => ferr.id !== id));
     } catch (err) {
       toast.error("Ocorreu um erro ao deletar ferramentas/materiais");
     }
@@ -156,10 +156,8 @@ const CadastroProcesso = () => {
 
   const handleDelPartes = async (id) => {
     try {
-      let arr = [];
       await api.delete(`partes/${id}/`);
-      arr = partes.filter((part) => part.id !== id);
-      setPartes(arr);
+      setPartes(partes.filter((part) => part.id !== id));
     } catch (err) {
       toast.error("Ocorreu um erro ao deletar a parte");
     }
@@ -167,10 +165,8 @@ const CadastroProcesso = () => {
 
   const handleDelCliente = async (id) => {
     try {
-      let arr = [];
       await api.delete(`clientes/${id}/`);
-      arr = clientes.filter((part) => part.id !== id);
-      setClientes(arr);
+      setClientes(clientes.filter((part) => part.id !== id));
     } catch (err) {
       toast.error("Ocorreu um erro ao deletar o cliente");
     }
@@ -178,10 +174,8 @@ const CadastroProcesso = () => {
 
   const handleDelDirecionadores = async (id) => {
     try {
-      let arr = [];
       await api.delete(`direcionadores/${id}/`);
-      arr = direcionadores.filter((dir) => dir.id !== id);
-      setDirecionadores(arr);
+      setDirecionadores(direcionadores.filter((dir) => dir.id !== id));
     } catch (err) {
       toast.error("Ocorreu um erro ao deletar o direcionador");
     }
@@ -189,10 +183,8 @@ const CadastroProcesso = () => {
 
   const handleDelEntradas = async (id) => {
     try {
-      let arr = [];
-      await api.delete(`entradas/${id}/`)
-      arr = entradas.filter((entrada) => entrada.id !== id)
-      setEntradas(arr);
+      await api.delete(`entradas/${id}/`);
+      setEntradas(entradas.filter((entrada) => entrada.id !== id));
     } catch (err) {
       toast.error("Ocorreu um erro ao deletar a entrada");
     }
@@ -200,10 +192,8 @@ const CadastroProcesso = () => {
 
   const handleDelSaidas = async (id) => {
     try {
-      let arr = [];
-      await api.delete(`saidas/${id}/`)
-      arr = saidas.filter((saida) => saida.id !== id)
-      setSaidas(arr);
+      await api.delete(`saidas/${id}/`);
+      setSaidas(saidas.filter((saida) => saida.id !== id));
     } catch (err) {
       toast.error("Ocorreu um erro ao deletar a saída");
     }
@@ -242,7 +232,7 @@ const CadastroProcesso = () => {
           append={handleEntradas}
         />
 
-        <CadastroSaidas 
+        <CadastroSaidas
           isOpen={isOpenSaidas}
           toggle={toggleSaidas}
           append={handleSaidas}
@@ -431,82 +421,31 @@ const CadastroProcesso = () => {
             <div className="form-group">
               <div className="row">
                 <div className="col-xs-4">
-                  <div className="div-multiselect">
-                    <label htmlFor="">Partes interessadas</label>
-                    <button
-                      type="button"
-                      className="btn btn-info btn-sm"
-                      onClick={togglePartes}
-                    >
-                      <i className="fa fa-plus" aria-hidden="true"></i>
-                    </button>
-                  </div>
-                  <div className="local-items">
-                    {partes.map((part) => (
-                      <div className="items" key={part.id}>
-                        {part.nomeParte}
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm"
-                          onClick={() => handleDelPartes(part.id)}
-                        >
-                          Deletar
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                  <MultiSelect
+                    toggle={togglePartes}
+                    label={"Partes interessadas"}
+                    items={partes}
+                    del={(id) => handleDelPartes(id)}
+                    descricaoLabel={"nomeParte"}
+                  />
                 </div>
                 <div className="col-xs-4">
-                  <div className="div-multiselect">
-                    <label htmlFor="">Direcionadores</label>
-                    <button
-                      type="button"
-                      className="btn btn-info btn-sm"
-                      onClick={toggleDirecionadores}
-                    >
-                      <i className="fa fa-plus" aria-hidden="true"></i>
-                    </button>
-                  </div>
-                  <div className="local-items">
-                    {direcionadores.map((dir) => (
-                      <div className="items" key={dir.id}>
-                        {dir.orgao}
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm"
-                          onClick={() => handleDelDirecionadores(dir.id)}
-                        >
-                          Deletar
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                  <MultiSelect
+                    toggle={toggleDirecionadores}
+                    label={"Direcionadores"}
+                    items={direcionadores}
+                    del={(id) => handleDelDirecionadores(id)}
+                    descricaoLabel={"orgao"}
+                  />
                 </div>
                 <div className="col-xs-4">
-                  <div className="div-multiselect">
-                    <label htmlFor="">Ferramentas/materiais</label>
-                    <button
-                      type="button"
-                      className="btn btn-info btn-sm"
-                      onClick={toggleFerramentas}
-                    >
-                      <i className="fa fa-plus" aria-hidden="true"></i>
-                    </button>
-                  </div>
-                  <div className="local-items">
-                    {ferramentas.map((ferr) => (
-                      <div className="items" key={ferr.id}>
-                        {ferr.descricao}
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm"
-                          onClick={() => handleDelFerramentas(ferr.id)}
-                        >
-                          Deletar
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                  <MultiSelect
+                    toggle={toggleFerramentas}
+                    label={"Ferramentas/materiais"}
+                    items={ferramentas}
+                    del={(id) => handleDelFerramentas(id)}
+                    descricaoLabel={"descricao"}
+                  />
                 </div>
               </div>
             </div>
@@ -527,86 +466,35 @@ const CadastroProcesso = () => {
                   )}
                 </div>
                 <div className="col-xs-4">
-                  <div className="div-multiselect">
-                    <label>Clientes</label>
-                    <button
-                      type="button"
-                      className="btn btn-info btn-sm"
-                      onClick={toggleClientes}
-                    >
-                      <i className="fa fa-plus" aria-hidden="true"></i>
-                    </button>
-                  </div>
-                  <div className="local-items">
-                    {clientes.map((cliente) => (
-                      <div className="items" key={cliente.id}>
-                        {cliente.nome}
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm"
-                          onClick={() => handleDelCliente(cliente.id)}
-                        >
-                          Deletar
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                  <MultiSelect
+                    toggle={toggleClientes}
+                    label={"Clientes"}
+                    items={clientes}
+                    del={(id) => handleDelCliente(id)}
+                    descricaoLabel={"nome"}
+                  />
                 </div>
               </div>
             </div>
             <div className="form-group">
               <div className="row">
                 <div className="col-xs-6">
-                  <div className="div-multiselect">
-                    <label>Entradas</label>
-                    <button
-                      type="button"
-                      className="btn btn-info btn-sm"
-                      onClick={toggleEntradas}
-                    >
-                      <i className="fa fa-plus" aria-hidden="true"></i>
-                    </button>
-                  </div>
-                  <div className="local-items">
-                    {entradas.map((ent) => (
-                      <div className="items" key={ent.id}>
-                        {ent.descricao}
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm"
-                          onClick={() => handleDelEntradas(ent.id)}
-                        >
-                          Deletar
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                  <MultiSelect
+                    toggle={toggleEntradas}
+                    label={"Entradas"}
+                    items={entradas}
+                    del={(id) => handleDelEntradas(id)}
+                    descricaoLabel={"descricao"}
+                  />
                 </div>
                 <div className="col-xs-6">
-                  <div className="div-multiselect">
-                    <label>Saídas</label>
-                    <button
-                      type="button"
-                      className="btn btn-info btn-sm"
-                      onClick={toggleSaidas}
-                    >
-                      <i className="fa fa-plus" aria-hidden="true"></i>
-                    </button>
-                  </div>
-                  <div className="local-items">
-                    {saidas.map((saida) => (
-                      <div className="items" key={saida.id}>
-                        {saida.descricao}
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm"
-                          onClick={() => handleDelSaidas(saida.id)}
-                        >
-                          Deletar
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                  <MultiSelect
+                    toggle={toggleSaidas}
+                    label={"Saídas"}
+                    items={saidas}
+                    del={(id) => handleDelSaidas(id)}
+                    descricaoLabel={"descricao"}
+                  />
                 </div>
               </div>
             </div>

@@ -43,7 +43,7 @@ const CadastroEntradas = ({ isOpen, toggle, append }) => {
   return (
     <>
       <Modal
-        title="Entradas/Saidas"
+        title="Entradas"
         isOpen={isOpen}
         footerButtons={footerButtons()}
       >
