@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import './styles.css'
 import FormButton from "../../common/template/form/formButton";
 import { useHistory } from "react-router-dom";
+import Layout from "../../common/template/layoutDashboard/layout";
 
 const CadastroMacroprocesso = (props) => {
   const {

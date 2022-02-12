@@ -44,7 +44,7 @@ const ProcessoDetail = ({ id, toggleIsEdit }) => {
   useEffect(() => {
     (async function () {
       try {
-        const { data } = await api.get(`processos/${id}`);
+        const { data } = await api.get(`processos/${id}/`);
         const {
           nome_processo,
           gestorPrincipal,
@@ -75,7 +75,6 @@ const ProcessoDetail = ({ id, toggleIsEdit }) => {
         setValue("versaop", versaop);
         setValue("etapas", etapas);
         setValue("macroProcesso_primario", macroProcesso_primario.id);
-
         setMacroprocesso(macroProcesso_primario);
         setPartes(parte);
         setFerramentas(ferramenta);
@@ -94,7 +93,6 @@ const ProcessoDetail = ({ id, toggleIsEdit }) => {
       try {
         const macroprocessoData = api.get("macroprocessos/");
         const [macroprocessos] = await Promise.all([macroprocessoData]);
-
         setMacroprocessos(macroprocessos.data);
       } catch (err) {
         toast.error("Ocorreu um erro ao carregar dados nos campos");

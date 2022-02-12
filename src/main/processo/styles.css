@@ -12,12 +12,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #38d3fa;
-    color: white;
-    padding: 4px;
-    border-radius: 5px;
+    background-color: rgba(231, 227, 227, 0.308);
+    color: black;
+    border-bottom: 1px solid #00bfef81;
+    padding: 3px;
     margin-top: 5px;
     margin-bottom: 5px;
+    overflow-x: auto;
 }
 
 .local-items{

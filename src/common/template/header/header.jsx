@@ -1,14 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import './styles.css'
+import {logout} from '../../../services/auth'
 
-const Header = (props) => {
+const Header = () => {
   return (
     <>
       <header className="main-header">
         <Link to="/" className="logo">
           <span className="logo-lg">
-            {/* <img src={Logo} width="40" height="40" alt="logo sgpo" /> */}
             <b>SGPO</b>
           </span>
         </Link>
@@ -16,9 +16,9 @@ const Header = (props) => {
           <div className="navbar-collapse">
             <ul className="nav navbar-nav navbar-right menu-top">
               <li>
-                <a href="#" className="item-menu-top">
+                <Link to className="item-menu-top" onClick={logout} title="Sair">
                   <i className="fa fa-sign-out"></i>
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

@@ -7,6 +7,7 @@ import BoxContent from "../../common/template/boxes/boxContent";
 import Pagination from "../../common/template/pagination/pagination";
 import FiltroComponente from "./componenteFiltro";
 import { Link } from "react-router-dom";
+import Layout from "../../common/template/layoutDashboard/layout";
 
 const ComponenteList = (props) => {
   const [componentes, setComponentes] = useState([]);

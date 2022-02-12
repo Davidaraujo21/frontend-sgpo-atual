@@ -10,9 +10,8 @@ const DcpDetail = ({ id }) => {
   useEffect(() => {
     (async function () {
       try {
-        const { data } = await api.get(`processos/${id}`);
+        const { data } = await api.get(`processos/${id}/`);
         setProcesso(data);
-        console.log(data);
       } catch (err) {
         toast.error("Ocorreu um erro ao obter dados do processo");
       }

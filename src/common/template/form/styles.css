@@ -12,10 +12,18 @@ form label{
     margin-bottom: 0;
 }
 
-.error-input{
+.error-input,
+.error-input:focus{
     border-color: red;
 }
 
 textarea{
     resize: vertical;
+}
+
+.items .btn{
+    background-color: transparent;
+    border: none;
+    color: #00ACD6;
+    font-size: 16px;
 }
