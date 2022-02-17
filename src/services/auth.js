@@ -1,45 +1,29 @@
-import api from './api'
-import jwt_decode from "jwt-decode"
+import jwt_decode from "jwt-decode";
 
-export function checkAuth(){
-    if(getToken()){
-        return true
-    }else{
-        return false
+export function checkAuth() {
+  const refreshToken = localStorage.getItem("refreshToken");
+  if (refreshToken) {
+    const { exp } = jwt_decode(refreshToken);
+    if (Date.now() >= exp * 1000) {
+      return false;
+    } else {
+      return true;
     }
-    // if(getToken()){
-    //     const {exp} = jwt_decode(getToken())
-    //     if(Date.now() >= exp * 1000){
-    //         api.post("api/refresh/", {refresh: localStorage.getItem("refreshToken")})
-    //             .then(res =>{
-    //                 localStorage.setItem("token", res.data.access)
-    //                 return true
-    //             })
-    //             .catch(res =>{
-    //                 logout()
-    //                 return false
-    //             })
-    //     }else{
-    //         api.defaults.headers.common["Authorization"] = `Bearer ${getToken()}`
-    //         return true
-    //     }  
-    // }else{
-    //     console.log("error")
-    //     return false
-    // }
+  } else {
+    return false;
+  }
 }
 
-export function getToken(){
-    return localStorage.getItem("token")
+export function getToken() {
+  return localStorage.getItem("token");
 }
 
-export async function login({access, refresh}){
-    localStorage.setItem("token", access)
-    localStorage.setItem("refreshToken", refresh)
+export async function login({ access, refresh }) {
+  localStorage.setItem("token", access);
+  localStorage.setItem("refreshToken", refresh);
 }
 
-export function logout(){
-    localStorage.removeItem("token")
-    localStorage.removeItem("refreshToken")
+export function logout() {
+  localStorage.removeItem("token");
+  localStorage.removeItem("refreshToken");
 }
-

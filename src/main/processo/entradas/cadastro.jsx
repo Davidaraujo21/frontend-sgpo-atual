@@ -17,7 +17,7 @@ const CadastroEntradas = ({ isOpen, toggle, append }) => {
   } = useForm();
   const entradaForm = useRef(null)
 
-  const onSubmit = (dataObj) => {
+  const onSubmit = () => {
     (async function () {
       try {
         const formToSubmit = entradaForm.current

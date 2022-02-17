@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { checkAuth, login } from "../../services/auth";
 import { Redirect, useHistory } from "react-router-dom";
+import api from "../../services/api";
 
 const Login = () => {
   const {
@@ -17,15 +18,16 @@ const Login = () => {
 
   const history = useHistory();
 
-  const submit = async ({ user, password }) => {
-    const userTest = {
-      user: "sgpo",
-      password: "1234",
+  const submit = async ({ username, password }) => {
+    const credentials = {
+      username,
+      password,
     };
-    if (user === userTest.user && password === userTest.password) {
-      login("tokenTeste", "refreshTokeTeste");
-      history.push("/");
-    } else {
+    try {
+      const { data } = await api.post("login/", credentials);
+      login(data)
+      history.push("/")
+    } catch (err) {
       toast.error("Usuário ou senha incorretos");
     }
   };
@@ -40,12 +42,12 @@ const Login = () => {
             <div className="form-group">
               <label htmlFor="">Usuário: </label>
               <input
-                className={`form-control ${errors.user ? "error-input" : ""}`}
+                className={`form-control ${errors.username ? "error-input" : ""}`}
                 type="text"
                 placeholder="Informe o usuário"
-                {...register("user", { required: true })}
+                {...register("username", { required: true })}
               />
-              {errors.user?.type === "required" && (
+              {errors.username?.type === "required" && (
                 <span className="help-block">Campo obrigatório</span>
               )}
             </div>
