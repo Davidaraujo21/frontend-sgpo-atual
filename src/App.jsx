@@ -2,36 +2,26 @@ import "./App.css";
 import "font-awesome/css/font-awesome.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import Header from "./common/template/header/header";
-import SideBar from "./common/template/sidebar/sidebar";
 import "./common/template/dependencies.js";
-import Routers from "./routers";
-import Footer from "./common/template/footer/footer";
 import {BrowserRouter as Router} from 'react-router-dom'
+import AuthOrApp from "./routes/authOrApp";
 
 function App() {
   return (
+    <>
     <Router>
-    <div className="skin-blue">
-        <div className="wrapper">
-          <Header />
-          <SideBar/>
-          <div className="content-wrapper">
-            <Routers />
-          </div>
-          <Footer />          
-          <ToastContainer
-            style={{ textAlign: "center" }}
-            limit={3}
-            autoClose={3000}
-            position="top-center"
-            className="alerta"
-            hideProgressBar={true}
-            pauseOnHover={false}
-          /> 
-        </div>
-    </div>
+      <AuthOrApp />
+      <ToastContainer
+        style={{ textAlign: "center" }}
+        limit={3}
+        autoClose={3000}
+        position="top-center"
+        className="alerta"
+        hideProgressBar={true}
+        pauseOnHover={false}
+      />
     </Router>
+    </>
   );
 }
 

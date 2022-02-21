@@ -42,8 +42,8 @@ const MacroprocessoDetalhes = (props) => {
   useEffect(() => {
     (async function () {
       try {
-        const dadosMacroprocesso = api.get(`macroprocessos/${id}`);
-        const dadosComponentePrimario = api.get("componentes");
+        const dadosMacroprocesso = api.get(`macroprocessos/${id}/`);
+        const dadosComponentePrimario = api.get("componentes/");
 
         const [macroprocesso, componentePrimario] = await Promise.all([
           dadosMacroprocesso,
@@ -84,7 +84,7 @@ const MacroprocessoDetalhes = (props) => {
 
   const onDelete = useCallback(async () => {
       try {
-        await api.delete(`macroprocessos/${id}`);
+        await api.delete(`macroprocessos/${id}/`);
         toast.success("Macroprocesso excluído com sucesso");
         history.push("/listaMacroprocessos");
       } catch (err) {

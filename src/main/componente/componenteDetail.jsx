@@ -9,6 +9,7 @@ import FormButton from "../../common/template/form/formButton";
 import InputMask from "react-input-mask";
 import MenuActions from "../../common/template/menuActions/menuActions";
 import MsgAlert from "../../common/template/msgAlert/msgAlert";
+import Layout from "../../common/template/layoutDashboard/layout";
 
 const ComponenteDetalhes = (props) => {
   const {
@@ -40,7 +41,7 @@ const ComponenteDetalhes = (props) => {
   useEffect(() => {
     (async function () {
       try {
-        const { data } = await api.get(`componentes/${id}`);
+        const { data } = await api.get(`componentes/${id}/`);
         setValue("nome_componente", data.nome_componente);
         setValue("objetivo", data.objetivo);
         setValue("codigo", data.codigo);
@@ -71,7 +72,7 @@ const ComponenteDetalhes = (props) => {
 
   const onDelete = useCallback(async () => {
       try {
-        await api.delete(`componentes/${id}`);
+        await api.delete(`componentes/${id}/`);
         toast.success("Componente excluído com sucesso");
         history.push("/listaComponentes");
       } catch (err) {

@@ -16,12 +16,13 @@ const Home = () => {
     (async function(){
         setIsLoading(true)
         try{
-            const componenteCount = await api.get("componentes/?limit=1")
-            const macroprocessoCount = await api.get("macroprocessos/?limit=1")
-            const processoCount = await api.get("processos/?limit=1")
-            setComponentesTotal(componenteCount.data.count)
-            setMacroprocessosTotal(macroprocessoCount.data.count)
-            setProcessosTotal(processoCount.data.count)
+            const componenteCount = api.get("componentes/?limit=1")
+            const macroprocessoCount = api.get("macroprocessos/?limit=1")
+            const processoCount = api.get("processos/?limit=1")
+            const [componente, macroprocesso, processo] = await Promise.all([componenteCount, macroprocessoCount, processoCount])      
+            setComponentesTotal(componente.data.count)
+            setMacroprocessosTotal(macroprocesso.data.count)
+            setProcessosTotal(processo.data.count)
             setIsLoading(false)
         }catch(err){
             setIsLoading(false)

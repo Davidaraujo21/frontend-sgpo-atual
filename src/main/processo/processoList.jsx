@@ -7,6 +7,7 @@ import BoxContent from "../../common/template/boxes/boxContent";
 import Pagination from "../../common/template/pagination/pagination";
 import { Link } from "react-router-dom";
 import FiltroProcesso from "./filtroProcesso";
+import Layout from "../../common/template/layoutDashboard/layout";
 
 const ProcessoList = (props) => {
   const [processos, setProcessos] = useState([]);

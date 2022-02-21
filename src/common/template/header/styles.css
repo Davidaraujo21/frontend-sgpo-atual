@@ -9,3 +9,11 @@ header a{
 .menu-top{
     margin-right: 5px!important;
 }
+
+.navbar button{
+    background-color: transparent;
+    border: none;
+    color: white;
+    padding:16px;
+    font-size: 18px;
+}

@@ -7,6 +7,7 @@ import BoxContent from "../../common/template/boxes/boxContent";
 import Pagination from "../../common/template/pagination/pagination";
 import { Link } from "react-router-dom";
 import FiltroMacroprocesso from "./macroprocessoFiltro";
+import Layout from "../../common/template/layoutDashboard/layout";
 
 const MacroprocessoList = (props) => {
   const [macroprocessos, setMacroprocessos] = useState([]);

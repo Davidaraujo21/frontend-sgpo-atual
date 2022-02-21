@@ -15,7 +15,7 @@ const MultiSelect = ({toggle, label, del, items, descricaoLabel}) =>{
               </div>
               <div className="local-items">
                 {items.map((item) => (
-                  <FormMultiSelectItems label={item[descricaoLabel]} id={item.id} del={() => del(item.id)}/>
+                  <FormMultiSelectItems label={item[descricaoLabel]} id={item.id} del={() => del(item.id)} urlPath={item.arquivo}/>
                 ))}
               </div>
         </>
