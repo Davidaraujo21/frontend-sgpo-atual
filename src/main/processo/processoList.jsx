@@ -7,7 +7,7 @@ import BoxContent from "../../common/template/boxes/boxContent";
 import Pagination from "../../common/template/pagination/pagination";
 import { Link } from "react-router-dom";
 import FiltroProcesso from "./filtroProcesso";
-import Layout from "../../common/template/layoutDashboard/layout";
+import Status from '../../common/template/status/status'
 
 const ProcessoList = (props) => {
   const [processos, setProcessos] = useState([]);
@@ -63,7 +63,7 @@ const ProcessoList = (props) => {
           }
         >
           <Table
-            headers={["Nome", "Gestor", "Proprietário", "Código", "Ações"]}
+            headers={["Nome", "Gestor", "Proprietário", "Código", "Status", "Ações"]}
           >
             {processos
               ? processos.map((processoContent) => (
@@ -72,6 +72,7 @@ const ProcessoList = (props) => {
                     <td>{processoContent.gestorPrincipal}</td>
                     <td>{processoContent.proprietario}</td>
                     <td>{processoContent.codigo}</td>
+                    <td><Status statusName={processoContent.statusProcesso}/></td>
                     <td>
                       <Link
                         className="btn btn-sm btn-primary"

@@ -66,6 +66,7 @@ const CadastroProcesso = () => {
           clientes: client,
           entradas: entr,
           saidas: said,
+          statusProcesso: "Em Aberto"
         };
         await api.post("processos/", processo_obj);
         reset({ codigo: "" });

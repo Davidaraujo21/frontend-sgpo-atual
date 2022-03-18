@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import './styles.css'
 import {logout} from '../../../services/auth'
+import logo2 from '../../../assets/logo2.svg'
 
 const Header = () => {
   return (
@@ -9,7 +10,8 @@ const Header = () => {
       <header className="main-header">
         <Link to="/" className="logo">
           <span className="logo-lg">
-            <b>SGPO</b>
+            {/* <b>SGPO</b> */}
+            <img src={logo2} alt="" width="40px" heigth="40px" style={{borderRadius: "2px"}}/>
           </span>
         </Link>
         <nav className="navbar navbar-static-top" role="navigation">

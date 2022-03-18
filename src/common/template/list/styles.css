@@ -1,0 +1,12 @@
+
+.list-info ul{
+    padding-left:0;
+    list-style: none;
+    overflow-wrap: break-word;
+}
+
+.list-info ul li{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

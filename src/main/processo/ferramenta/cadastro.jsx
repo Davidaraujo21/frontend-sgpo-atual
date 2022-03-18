@@ -45,7 +45,7 @@ const CadastroMaterial = ({isOpen, toggle, append}) => {
         isOpen={isOpen}
         footerButtons={footerButtons()}
       >
-        <FormModal label="Formulário de cadastro" color="warning">
+        <FormModal label="Formulário de cadastro" color="primary">
           <form className="form" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
               <div className="row">

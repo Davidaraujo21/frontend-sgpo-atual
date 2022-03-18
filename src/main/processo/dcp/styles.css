@@ -2,18 +2,26 @@
     background-color: rgb(212, 209, 209);
     display: grid;
     grid-template-areas: 
-    "codigo-nome fronteira fronteira fronteira cadeia-valor proprietario"
+    "codigo nome fronteira fronteira cadeia-valor proprietario"
     "objetivo objetivo objetivo objetivo objetivo gestores"
-    "entradas etapas saidas saidas clientes clientes"
-    "entradas etapas saidas saidas clientes clientes"
-    "ferramentas processos-relacionados processos-relacionados processos-relacionados direcionadores direcionadores"
-    "ferramentas processos-relacionados processos-relacionados processos-relacionados direcionadores direcionadores"
+    "entradas entradas etapas etapas saidas saidas"
+    "entradas entradas etapas etapas saidas saidas"
+    "ferramentas ferramentas clientes clientes direcionadores direcionadores"
+    "ferramentas ferramentas clientes clientes direcionadores direcionadores"
     ;
     grid-template-rows: repeat(6, minmax(120px, auto));
 }
 
-.codigo-nome{
-    grid-area: codigo-nome;
+.local-dcp .shadow{
+    background-color: black;
+}
+
+.codigo{
+    grid-area: codigo;
+}
+
+.nome{
+    grid-area: nome;
 }
 
 .fronteira{
@@ -71,3 +79,16 @@
 .indicadores{
     grid-area: indicadores;
 }
+
+.list-info ul{
+    padding-left:0;
+    list-style: none;
+    overflow-wrap: break-word;
+}
+
+.list-info ul li{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+

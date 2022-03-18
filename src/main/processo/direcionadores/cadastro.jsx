@@ -44,7 +44,7 @@ const CadastroDirecionador = ({ isOpen, toggle, append }) => {
   return (
     <>
       <Modal title="Direcionador" isOpen={isOpen} toggle={toggle} footerButtons={footerButtons()}>
-        <FormModal label="Formulário de cadastro" color="warning">
+        <FormModal label="Formulário de cadastro" color="primary">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="form direcionadores"

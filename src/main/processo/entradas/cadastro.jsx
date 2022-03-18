@@ -60,7 +60,7 @@ const CadastroEntradas = ({ isOpen, toggle, append }) => {
   return (
     <>
       <Modal title="Entradas" isOpen={isOpen} footerButtons={footerButtons()}>
-        <FormModal label="Formulário de cadastro" color="warning">
+        <FormModal label="Formulário de cadastro" color="primary">
           <form className="form" onSubmit={handleSubmit(onSubmit)} ref={entradaForm}>
             <div className="form-group">
               <div className="row">

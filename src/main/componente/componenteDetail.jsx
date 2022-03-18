@@ -8,8 +8,7 @@ import FormModal from "../../common/template/form/form";
 import FormButton from "../../common/template/form/formButton";
 import InputMask from "react-input-mask";
 import MenuActions from "../../common/template/menuActions/menuActions";
-import MsgAlert from "../../common/template/msgAlert/msgAlert";
-import Layout from "../../common/template/layoutDashboard/layout";
+import ConfirmModal from "../../common/template/modal/confirmModal";
 
 const ComponenteDetalhes = (props) => {
   const {
@@ -23,20 +22,9 @@ const ComponenteDetalhes = (props) => {
 
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [isSubmit, setIsSubmit] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
   const { id } = useParams();
   const history = useHistory();
-
-  const onClickDelete = () => {
-    toast(
-      <MsgAlert
-        text={
-          "A exclusão desse componente irá excluir todos os macroprocessos e processos ligados a ele"
-        }
-        onDelete={onDelete}
-      />,
-      { autoClose: 6000 , limit: 1}
-    );
-  };
 
   useEffect(() => {
     (async function () {
@@ -80,9 +68,19 @@ const ComponenteDetalhes = (props) => {
       }
   }, [id, history]);
 
+  const toggleDeleteModal = () =>{
+    setIsDelete(!isDelete)
+  }
+
   return (
     <>
       <Content title="Componentes" action="detalhes">
+        <ConfirmModal 
+          title={"Ao excluir um componente todos os macroprocessos e processos vinculados a ele serão excluídos. Confirmar exclusão do componente?"}
+          isOpen={isDelete}
+          toggle={toggleDeleteModal}
+          action={onDelete}
+        /> 
         <FormModal
           color="info"
           label={"Detalhes do componente"}
@@ -92,7 +90,7 @@ const ComponenteDetalhes = (props) => {
               isEdit
               isDelete
               toggleIsReadOnly={toggleIsReadOnly}
-              onDelete={onClickDelete}
+              onDelete={toggleDeleteModal}
             />
           }
         >
