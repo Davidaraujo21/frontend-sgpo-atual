@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import FormModal from "../../common/template/form/form";
 import FormButton from "../../common/template/form/formButton";
 import logoImg from "../../assets/logo_sgpo.png";
+import logo from "../../assets/logo.svg";
 import "./styles.css";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { checkAuth, login } from "../../services/auth";
+import { checkAuth, login, decodeJwt } from "../../services/auth";
 import { Redirect, useHistory } from "react-router-dom";
 import api from "../../services/api";
+import { loginDataUser } from "../../store/UserContext/actions";
+import { UserContext } from "../../store/UserContext/context";
 
 const Login = () => {
   const {
@@ -17,6 +20,9 @@ const Login = () => {
   } = useForm();
 
   const history = useHistory();
+  const context = useContext(UserContext);
+  const {userDispatch} = context;
+  const [isLogin, setIsLogin] = useState();
 
   const submit = async ({ username, password }) => {
     const credentials = {
@@ -24,11 +30,16 @@ const Login = () => {
       password,
     };
     try {
-      const { data } = await api.post("login/", credentials);
-      login(data)
-      history.push("/")
+      setIsLogin(true)
+      const { data:{access, refresh} } = await api.post("login/", credentials);
+      const {username, tipo_usuario} = decodeJwt(refresh)
+      login({access, refresh, username, tipo_usuario});
+      loginDataUser(userDispatch, {username, tipo_usuario})
+      history.push("/");
+      setIsLogin(false)
     } catch (err) {
       toast.error("Usuário ou senha incorretos");
+      setIsLogin(false)
     }
   };
 
@@ -37,12 +48,14 @@ const Login = () => {
   ) : (
     <>
       <div className="local-form-login">
-        <FormModal hasImg img={logoImg} color="primary" width={"500px"}>
+        <FormModal hasImg img={logo} color="primary" width={"500px"} loadingSubmit={isLogin}>
           <form className="form login" onSubmit={handleSubmit(submit)}>
             <div className="form-group">
               <label htmlFor="">Usuário: </label>
               <input
-                className={`form-control ${errors.username ? "error-input" : ""}`}
+                className={`form-control ${
+                  errors.username ? "error-input" : ""
+                }`}
                 type="text"
                 placeholder="Informe o usuário"
                 {...register("username", { required: true })}

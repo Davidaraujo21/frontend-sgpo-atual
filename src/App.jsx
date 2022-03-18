@@ -5,12 +5,15 @@ import { ToastContainer } from "react-toastify";
 import "./common/template/dependencies.js";
 import {BrowserRouter as Router} from 'react-router-dom'
 import AuthOrApp from "./routes/authOrApp";
+import UserProvider from "./store/UserContext/userProvider";
 
 function App() {
   return (
     <>
     <Router>
-      <AuthOrApp />
+      <UserProvider>
+        <AuthOrApp />
+      </UserProvider>
       <ToastContainer
         style={{ textAlign: "center" }}
         limit={3}

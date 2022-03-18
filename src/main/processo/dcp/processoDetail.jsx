@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { useParams } from "react-router";
 import LinkCadastro from "../../../common/template/form/linkCadastro";
 import api from "../../../services/api";
 import InputMask from "react-input-mask";
@@ -33,13 +32,14 @@ const ProcessoDetail = ({ id, toggleIsEdit }) => {
   const [macroprocesso, setMacroprocesso] = useState();
   const [entradas, setEntradas] = useState([]);
   const [saidas, setSaidas] = useState([]);
-  const [isSubmit, setIsSubmit] = useState(false);
   const [isOpenFerramentas, setIsOpenFerramentas] = useState(false);
   const [isOpenPartes, setIsOpenPartes] = useState(false);
   const [isOpenClientes, setIsOpenClientes] = useState(false);
   const [isOpenDirecionadores, setIsOpenDirecionadores] = useState(false);
   const [isOpenEntradas, setIsOpenEntradas] = useState(false);
   const [isOpenSaidas, setIsOpenSaidas] = useState(false);
+
+  const baseUrl = api.defaults.baseURL.replace("/api/", "/")
 
   useEffect(() => {
     (async function () {
@@ -74,7 +74,6 @@ const ProcessoDetail = ({ id, toggleIsEdit }) => {
         setValue("proad", proad);
         setValue("versaop", versaop);
         setValue("etapas", etapas);
-        setValue("macroProcesso_primario", macroProcesso_primario.id);
         setMacroprocesso(macroProcesso_primario);
         setPartes(parte);
         setFerramentas(ferramenta);
@@ -528,6 +527,7 @@ const ProcessoDetail = ({ id, toggleIsEdit }) => {
                 items={entradas}
                 del={(id) => handleDelEntradas(id)}
                 descricaoLabel={"descricao"}
+                baseUrl={baseUrl}
               />
             </div>
             <div className="col-xs-6">

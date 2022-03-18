@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import { getToken, checkAuth } from "../services/auth";
+import { checkAuth } from "../services/auth";
 
 const PrivateRouter = ({ component: Component, ...rest }) => {
   return (

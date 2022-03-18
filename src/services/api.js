@@ -5,7 +5,7 @@ const api = axios.create({
   baseURL:
     process.env.NODE_ENV === "development"
       ? "http://localhost:8000/api/"
-      : "http://sgpo.eastus.cloudapp.azure.com:8000/api/",
+      : "http://sgpo.eastus.cloudapp.azure.com:1337/api/",
 });
 
 api.interceptors.request.use(async (config) => {
